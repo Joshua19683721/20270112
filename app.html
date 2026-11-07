@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__TITLE__</title>
+<style>
+:root{--blue:#2b6cb0;--blue2:#3182ce;--teal:#0f8b7e;--amber:#d97706;--red:#c53030;--green:#2f855a;--ink:#1a2b3c;--muted:#64748b;--line:#e2e8f0;--bg:#f4f7fb;--card:#fff;--shadow:0 2px 10px rgba(30,60,100,.08)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,sans-serif;line-height:1.75;font-size:16px}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 70px}
+header{background:linear-gradient(120deg,#1e4f8f,#2b6cb0 45%,#0f8b7e);color:#fff;padding:22px 0 18px;box-shadow:0 4px 18px rgba(20,60,110,.18)}
+header .wrap{padding-bottom:0;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo{flex:1;min-width:230px}
+.logo h1{margin:0;font-size:22px;letter-spacing:1px;font-weight:600}
+.logo p{margin:2px 0 0;font-size:13px;opacity:.86}
+.badge{background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:6px 14px;font-size:13px;white-space:nowrap}
+nav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+nav .wrap{display:flex;gap:4px;padding-top:0;padding-bottom:0;overflow-x:auto}
+nav button{border:0;background:transparent;padding:13px 18px;font-size:15px;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+nav button.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.view{display:none;padding-top:20px}.view.on{display:block}
+h2{font-size:20px;margin:0 0 4px}h3{font-size:16px;margin:0 0 10px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:18px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 16px;font-size:14px;color:var(--ink)}
+.btn:hover{border-color:var(--blue2);color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:var(--blue2);color:#fff}
+.btn.teal{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.sm{padding:5px 11px;font-size:13px;border-radius:8px}
+.btn.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+.lesson{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.lesson:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--blue)}
+.lesson:nth-child(2):before{background:var(--teal)}.lesson:nth-child(3):before{background:var(--amber)}
+.lesson h3{font-size:19px;margin:0 0 2px}
+.lesson .meta{color:var(--muted);font-size:13px;margin-bottom:14px}
+.stat{display:flex;gap:18px;margin:12px 0;font-size:13px;color:var(--muted)}
+.stat b{display:block;font-size:20px;color:var(--ink);line-height:1.3}
+.bar{height:9px;background:#edf2f7;border-radius:99px;overflow:hidden;margin:8px 0 14px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--blue2),var(--teal));border-radius:99px;transition:width .5s}
+.pill{display:inline-block;background:#edf5ff;color:var(--blue);border-radius:99px;padding:2px 10px;font-size:12px;margin:0 4px 4px 0}
+.pill.t{background:#e6f6f3;color:var(--teal)}.pill.a{background:#fff4e3;color:var(--amber)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 14px;font-size:13px;color:var(--muted)}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+svg.mm{width:100%;height:430px;background:#fbfdff;border:1px solid var(--line);border-radius:12px}
+#homeMap{height:620px}
+.mermaid{background:#fbfdff;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;overflow-x:auto}
+.mermaid svg{max-width:100%;height:auto}
+.kcard{border:1px solid var(--line);border-radius:12px;padding:14px;background:#fff;cursor:pointer;min-height:104px;transition:.15s}
+.kcard:hover{border-color:var(--blue2);transform:translateY(-2px)}
+.kcard.done{border-color:var(--green);background:#f2fbf6}
+.kcard .t{font-weight:600;color:var(--blue);font-size:17px;margin-bottom:4px}
+.kcard .b{font-size:13px;color:#41556b;white-space:pre-wrap;max-height:78px;overflow:hidden}
+.kcard.open .b{max-height:none}
+.kcard .tag{font-size:11px;color:var(--muted);margin-top:6px}
+/* 詞性標註：彩色標籤＋「·」分隔，和課文例句、說明文字明顯區開 */
+.pos{display:inline-block;border:1px solid;border-radius:6px;padding:0 8px;font-size:12px;font-weight:600;line-height:1.75;white-space:nowrap;margin:1px 0}
+.pos-n{color:#2b6cb0;background:#e8f2fd;border-color:#a9cdf2}
+.pos-v{color:#b03040;background:#fdecee;border-color:#f0b3bd}
+.pos-a{color:#2f855a;background:#e7f6ed;border-color:#a9dfc0}
+.pos-d{color:#6b46c1;background:#f1e9fd;border-color:#cfb6f2}
+.pos-o{color:#a55b06;background:#fff3e0;border-color:#f0cd94}
+.posline{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:8px 0 6px;padding:8px 10px;background:#f8fafc;border:1px dashed #cbd8e6;border-radius:9px;line-height:1.6}
+.posline .lab{font-size:11px;color:var(--muted);letter-spacing:1px;margin-right:3px}
+.poslit{color:#475569;font-size:14px;padding:0 2px}
+.poseg{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.possep{color:#7c8fa5;font-size:14px;font-weight:700;user-select:none}
+.poslegend{display:flex;flex-wrap:wrap;gap:7px;align-items:center;font-size:12px;color:var(--muted);background:#f6faff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin:0 0 14px}
+.poslegend b{color:var(--ink);font-size:13px;margin-right:3px}
+.poslegend .note{flex-basis:100%;color:#64748b;font-size:12px}
+/* 生字一字多義：一條解釋一列，詞性彩色標籤＋「—」分隔，例詞另起灰字 */
+.senses{margin:7px 0 2px;max-height:152px;overflow:hidden}
+.kcard.open .senses{max-height:none}
+.sense{display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;padding:5px 0;border-bottom:1px dashed #e7eef6;font-size:13px;line-height:1.7}
+.sense:last-child{border-bottom:0}
+.snum{display:inline-block;min-width:15px;color:#7f90a4;font-size:12px;font-weight:700;text-align:center;margin-right:2px}
+.ssep{color:#7f90a4;font-weight:700}
+.sdef{color:#334155;flex:1 1 170px}
+.sex{flex-basis:100%;color:#78889a;font-size:12px;padding-left:21px}
+.morehint{display:block;font-size:11px;color:var(--blue2);margin-top:4px}
+.kcard.open .morehint{display:none}
+pre.text{white-space:pre-wrap;font-family:inherit;font-size:16px;line-height:2.05;background:#fffdf7;border:1px solid #f0e6cf;border-radius:12px;padding:18px 22px;margin:0}
+.qnav{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.qnav button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:#fff;font-size:13px}
+.qnav button.cur{background:var(--blue);color:#fff;border-color:var(--blue)}
+.qnav button.ok{background:#e8f7ee;border-color:#9ae6b4}.qnav button.no{background:#fdecec;border-color:#feb2b2}
+.qbox{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+.qstem{font-size:19px;line-height:2;margin:10px 0 18px;background:#f8fbff;border-left:5px solid var(--blue2);padding:14px 16px;border-radius:0 10px 10px 0;white-space:pre-wrap}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 16px;margin:9px 0;font-size:17px;transition:.12s}
+.opt:hover{border-color:var(--blue2);background:#f7fbff}
+.opt .k{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:#edf2f7;border-radius:7px;margin-right:10px;font-size:13px;color:var(--muted)}
+.opt.right{background:#eafaf0;border-color:#48bb78}.opt.wrong{background:#fdf0f0;border-color:#fc8181}
+.opt.dis{pointer-events:none;opacity:.92}
+.explain{background:#fffbeb;border:1px solid #f6e0a8;border-radius:12px;padding:14px 16px;margin-top:14px;font-size:14px;white-space:pre-wrap}
+.explain .why{display:block;margin-top:8px;padding:7px 10px;background:#fff;border-radius:8px;border:1px solid #f0e2bf;font-size:13px}
+.explain .why.bad{color:#8a4b4b}.explain .why.good{color:#226b46}
+.timer{font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px}
+.stepbox{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}
+.stepbox .q{font-size:16px;font-weight:600;margin-bottom:8px;white-space:pre-wrap}
+.hint{background:#f0f8ff;border-left:4px solid var(--blue2);padding:9px 12px;border-radius:0 8px 8px 0;margin:7px 0;font-size:14px}
+.ansbox{background:#eefaf3;border-left:4px solid var(--green);padding:9px 12px;border-radius:0 8px 8px 0;margin:7px 0;font-size:14px;white-space:pre-wrap}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left}th{color:var(--muted);font-weight:500}
+.chip{display:inline-block;border-radius:8px;padding:3px 9px;font-size:12px;background:#edf2f7;color:var(--muted)}
+.chip.g{background:#e6f6ee;color:var(--green)}.chip.r{background:#fdeaea;color:var(--red)}
+.ach{display:flex;gap:10px;flex-wrap:wrap}.ach div{border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:#fff;font-size:13px;min-width:130px;text-align:center}
+.ach div.lock{opacity:.42}.ach b{display:block;font-size:20px;margin-bottom:2px}
+textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:12px;padding:12px;font-family:inherit;font-size:15px;line-height:1.9;resize:vertical}
+label.chk{display:block;padding:7px 0;font-size:14px;cursor:pointer}
+label.chk input{width:17px;height:17px;margin-right:8px;vertical-align:-2px}
+#dbg{display:none;background:#fff0f0;color:#a00;padding:10px;font-size:13px;white-space:pre-wrap;border-bottom:1px solid #fbb}
+.foot{text-align:center;color:var(--muted);font-size:12px;padding:26px 0}
+@media(max-width:600px){.wrap{padding:0 12px 60px}.logo h1{font-size:18px}.qstem{font-size:17px}.opt{font-size:16px}svg.mm{height:340px}}
+@media print{nav,.btn,.tabs{display:none}.view{display:none}.view.on{display:block}}
+</style>
+</head>
+<body>
+<div id="dbg"></div>
+<header><div class="wrap">
+  <div class="logo"><h1>國語四上・自主學習系統</h1><p>__SUBTITLE__</p></div>
+  <div class="badge" id="streak">連續學習 0 天</div>
+  <div class="badge" id="totalBadge">累計作答 0 題</div>
+</div></header>
+<nav><div class="wrap" id="nav">
+  <button data-v="home" class="on">首頁</button>
+  <button data-v="study">自主學習</button>
+  <button data-v="quiz">自動測驗</button>
+  <button data-v="wrong">錯題本</button>
+  <button data-v="extra" id="navExtra">我會自己讀</button>
+  <button data-v="progress">進度與成就</button>
+</div></nav>
+<div class="wrap">
+  <section class="view on" id="v-home"></section>
+  <section class="view" id="v-study"></section>
+  <section class="view" id="v-extra"></section>
+  <section class="view" id="v-quiz"></section>
+  <section class="view" id="v-wrong"></section>
+  <section class="view" id="v-progress"></section>
+  <div class="foot">題目與答案由教材自動解析，離線內嵌 Markmap 與 Mermaid</div>
+</div>
+<!--__LIBS__-->
+<script>/*__DATA__*/</script>
+<script>
+(function(){
+'use strict';
+var D=window.APP_DATA, KEY=(D.meta&&D.meta.storageKey)||'guoyu_selflearn_v1';
+var M=D.meta||{};
+var ALL_LABEL=M.allLabel||'全部課程';
+var errs=[];
+window.addEventListener('error',function(e){var m=e.message||'';if(/SVGLength|getBBox|Could not resolve relative length/.test(m))return;errs.push(m);document.getElementById('dbg').style.display='block';document.getElementById('dbg').textContent='JS 錯誤：'+errs.join(' / ');});
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+/* 詞性螢光筆：任何文字裡的（名詞）（動詞）…都換成彩色標籤，括號本身就是分隔符號 */
+var POS_RE=/[（(](疊字副詞|形容詞|名詞|動詞|副詞|代名詞|代詞|連接詞|連詞|助詞|嘆詞|量詞|數詞|疊字|主詞|受詞)[）)]/g;
+function posClass(w){if(/名詞|代詞|主詞|受詞/.test(w))return 'n';if(/動詞/.test(w))return 'v';if(/形容詞/.test(w))return 'a';if(/副詞|疊字/.test(w))return 'd';return 'o';}
+function H(s){return esc(s).replace(POS_RE,function(_,w){return '<span class="pos pos-'+posClass(w)+'">'+w+'</span>';});}
+function posRow(c){
+  if(!c.segs||!c.segs.length)return '';
+  var body=c.segs.map(function(s,i){
+    // 純標點直接接在前面，不多加一個分隔符；分隔符與後面那個詞綁成一組，換行時不會落單。
+    var punct=/^[，。、！？；：,.!?;:·]+$/.test(s.label);
+    var sep=(i&&!punct)?'<span class="possep">·</span>':'';
+    var tok=s.pos?'<span class="pos pos-'+posClass(s.pos)+'">'+esc(s.label)+'</span>'
+                 :'<span class="poslit">'+esc(s.label)+'</span>';
+    return '<span class="poseg">'+sep+tok+'</span>';
+  }).join('');
+  return '<div class="posline"><span class="lab">結構</span>'+body+'</div>';
+}
+function sensesRow(c){
+  if(!c.senses||!c.senses.length)return '';
+  var rows=c.senses.map(function(s){
+    return '<div class="sense"><span class="snum">'+esc(s.n||'·')+'</span>'+
+      (s.posFull?'<span class="pos pos-'+posClass(s.posFull)+'" title="課本縮寫：'+esc(s.pos)+'">'+esc(s.posFull)+'</span><span class="ssep">—</span>':'')+
+      '<span class="sdef">'+H(s.def)+'</span>'+
+      (s.ex?'<span class="sex">例：'+H(s.ex)+'</span>':'')+'</div>';
+  }).join('');
+  var more=c.senses.length>2?'<span class="morehint">點卡片展開全部 '+c.senses.length+' 種用法 ▾</span>':'';
+  return '<div class="senses">'+rows+'</div>'+more;
+}
+// 知識卡內文專用：課文的 ⑴⑵ 編號也做成小標記，和後面解釋分開。
+function C(s){return H(s).replace(/([⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂])/g,'<span class="snum">$1</span>');}
+var POS_LEGEND='<div class="poslegend"><b>詞性標註圖例</b>'+
+  [['n','名詞'],['v','動詞'],['a','形容詞'],['d','副詞'],['o','其他']].map(function(p){return '<span class="pos pos-'+p[0]+'">'+p[1]+'</span>';}).join('')+
+  '<span class="note">彩色標籤＝詞性。在〈語句練習〉是「要填入的詞性」（灰字是固定字詞，「·」為分隔符）；在〈生字〉是「這一條解釋的詞性」（「—」後接解釋，灰字是例詞），點卡片可展開全部用法。</span>'+
+  '<span class="note">課本單字縮寫：名＝名詞、動＝動詞、形＝形容詞、副＝副詞、代＝代詞、量＝量詞、連＝連詞、助＝助詞、摹＝摹聲詞。</span></div>';
+function $(s,r){return (r||document).querySelector(s);}
+function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+var S=load();
+S.cards=S.cards||{};S.quiz=S.quiz||{};S.wrong=S.wrong||{};S.sessions=S.sessions||[];S.best=S.best||{};S.writing=S.writing||{};S.streak=S.streak||{last:'',count:0};S.check=S.check||{};S.extra=S.extra||{};
+/* 舊版把整課語句練習塞成一張「本課語句練習」卡，新版拆成一個練習一張。
+   已按過「我學會了」的人，直接把該課所有語句練習卡沿用為已學會，進度不歸零。 */
+(function(){var changed=false;(D.lessons||[]).forEach(function(L){
+  var old=L.id+'|語句練習|本課語句練習';if(!S.cards[old])return;
+  (L.cards||[]).forEach(function(c){if(c.type==='語句練習')S.cards[L.id+'|'+c.type+'|'+c.title]=true;});
+  delete S.cards[old];changed=true;
+});if(changed){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}})();
+function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+function touchDay(){var d=today();if(S.streak.last===d)return;var y=new Date(Date.now()-86400000);var ys=y.getFullYear()+'-'+('0'+(y.getMonth()+1)).slice(-2)+'-'+('0'+y.getDate()).slice(-2);S.streak.count=(S.streak.last===ys)?(S.streak.count+1):1;S.streak.last=d;save();}
+function pct(a,b){return b?Math.round(a/b*100):0;}
+function lessonDone(id){var c=(D.lessons.filter(function(l){return l.id===id;})[0]||{}).cards||[];var seen=c.filter(function(x){return S.cards[id+'|'+x.type+'|'+x.title];}).length;var q=D.quiz.filter(function(x){return x.lesson===id;});var done=q.filter(function(x){return S.quiz[x.id]&&S.quiz[x.id].right>0;}).length;return Math.round((pct(seen,c.length)*0.4)+(pct(done,q.length)*0.6));}
+function bestScore(id){return S.best[id]||0;}
+function wrongCount(id){return Object.keys(S.wrong).filter(function(k){return (D.quiz.filter(function(q){return q.id===k;})[0]||{}).lesson===id;}).length;}
+
+/* ---------- routing ---------- */
+var view='home';
+function go(v){view=v;$$('#nav button').forEach(function(b){b.classList.toggle('on',b.dataset.v===v);});$$('.view').forEach(function(s){s.classList.toggle('on',s.id==='v-'+v);});renderAll();window.scrollTo(0,0);}
+$('#nav').addEventListener('click',function(e){var b=e.target.closest('button');if(b)go(b.dataset.v);});
+
+/* ---------- mermaid / markmap ---------- */
+var mermaidReady=false,mmdSeq=0;
+function initMermaid(){if(mermaidReady||!window.mermaid)return;try{mermaid.initialize({startOnLoad:false,securityLevel:'loose',theme:'base',themeVariables:{primaryColor:'#e8f2fd',primaryTextColor:'#1a2b3c',primaryBorderColor:'#3182ce',lineColor:'#3182ce',fontSize:'15px'},flowchart:{useMaxWidth:false,htmlLabels:true},state:{useMaxWidth:false}});mermaidReady=true;}catch(e){errs.push('mermaid init '+e.message);}}
+function drawMermaid(code){return '<div class="mermaid" data-code="'+esc(code)+'"></div>';}
+function runMermaid(root){
+  initMermaid();if(!window.mermaid)return;
+  $$('.mermaid',root).forEach(function(el){
+    if(el.dataset.processed||el.dataset.busy)return;
+    el.dataset.busy='1';
+    var code=el.dataset.code||'',id='gyMmd'+(++mmdSeq);
+    window.mermaid.render(id,code).then(function(res){
+      if(!document.contains(el))return;
+      el.innerHTML=res.svg;el.dataset.processed='true';
+      if(res.bindFunctions){try{res.bindFunctions(el);}catch(e){}}
+    }).catch(function(e){
+      if(document.contains(el))el.textContent='（流程圖載入失敗）';
+      errs.push('mermaid '+e.message);
+    }).then(function(){el.removeAttribute('data-busy');});
+  });
+}
+function drawMarkmap(root,svg){if(!window.markmap||!window.markmap.Markmap||!svg)return;svg.innerHTML='';try{var mm=window.markmap.Markmap.create(svg,{duration:220,initialExpandLevel:3,colorFreezeLevel:3,maxWidth:280,paddingX:16},root);setTimeout(function(){try{mm.fit();}catch(e){}},260);}catch(e){errs.push('markmap '+e.message);svg.textContent='心智圖載入失敗：'+e.message;}}
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  var h='<h2>今天想從哪一課開始？</h2><p class="sub">每一課都照著「預習 → 課文 → 知識卡 → 心智圖 → 閱讀引導 → 測驗 → 錯題 → 寫作」走，學完才算完成。</p>';
+  h+='<div class="grid">';
+  D.lessons.forEach(function(L){
+    var p=lessonDone(L.id),b=bestScore(L.id),w=wrongCount(L.id);
+    h+='<div class="lesson"><h3>'+esc(L.label)+'　'+esc(L.title)+'</h3><div class="meta">'+esc(L.genre)+'｜'+esc(L.focus)+'</div>'+
+       '<div><span class="pill">'+L.cards.length+' 張知識卡</span><span class="pill t">'+L.reading.length+' 題閱讀引導</span><span class="pill a">'+D.quiz.filter(function(q){return q.lesson===L.id;}).length+' 題題庫</span></div>'+
+       '<div class="stat"><div><b>'+p+'%</b>完成度</div><div><b>'+b+'</b>最佳成績</div><div><b>'+w+'</b>待清錯題</div></div>'+
+       '<div class="bar"><i style="width:'+p+'%"></i></div>'+
+       '<div class="row"><button class="btn primary sm" data-act="study" data-id="'+L.id+'">開始學</button>'+
+       '<button class="btn sm" data-act="quiz" data-id="'+L.id+'">直接測驗</button>'+
+       '<button class="btn sm" data-act="map" data-id="'+L.id+'">看心智圖</button></div></div>';
+  });
+  h+='</div>';
+  h+='<div class="panel"><h3>我的學習路線（Mermaid 流程圖）</h3><p class="sub">答錯的題目會自動進錯題本，清完再往下一關。</p>'+drawMermaid(D.diagrams.flow)+'</div>';
+  h+='<div class="panel"><h3>單元知識地圖（Markmap 心智圖）</h3><p class="sub">點節點可以展開／收合，先看全貌再進單課，比較不容易見樹不見林。</p>'+
+     '<div class="row" style="margin-bottom:10px"><button class="btn sm" data-act="allmap">展開全單元地圖</button></div><svg class="mm" id="homeMap"></svg></div>';
+  h+='<div class="panel"><h3>'+esc(M.unitHeading||'各課的關係')+'</h3>'+drawMermaid(D.diagrams.unit)+'</div>';
+  if(D.extra&&D.extra.length){
+    h+='<div class="panel"><h3>我會自己讀（加碼自讀）</h3><p class="sub">這幾篇不用考試，自己讀、自己問、自己說大意；讀完按「我讀完了」留個紀錄。</p><div class="grid">'+
+      D.extra.map(function(E){return '<div class="lesson"><h3>'+esc(E.title)+'</h3><div class="meta">'+esc(E.label)+'｜'+esc(E.genre)+'｜'+esc(E.focus)+'</div>'+
+        '<p class="sub" style="margin:0">'+H(E.text.slice(0,64))+'…</p>'+
+        '<div class="row" style="margin-top:12px"><button class="btn primary sm" data-act="extra" data-id="'+E.id+'">開始自讀</button>'+
+        (S.extra[E.id]?'<span class="pill t">✓ 已讀完</span>':'')+'</div></div>';}).join('')+'</div></div>';
+  }
+  var el=$('#v-home');el.innerHTML=h;
+  el.onclick=function(e){var b=e.target.closest('[data-act]');if(!b)return;var a=b.dataset.act,id=b.dataset.id;
+    if(a==='study'){studyLesson=id;studyTab='text';go('study');}
+    if(a==='quiz'){quizLesson=id;startQuiz();go('quiz');}
+    if(a==='map'){studyLesson=id;studyTab='map';go('study');}
+    if(a==='extra'){extraId=id;extraTab='text';go('extra');}
+    if(a==='allmap'){drawMarkmap(D.mindmapAll,$('#homeMap'));}
+  };
+  runMermaid(el);drawMarkmap(D.mindmapAll,$('#homeMap'));
+  updateBadges();
+}
+
+/* ---------- STUDY ---------- */
+var studyLesson=(D.lessons[0]||{}).id,studyTab='text',cardFilter='全部';
+function renderStudy(){
+  var L=D.lessons.filter(function(x){return x.id===studyLesson;})[0]||D.lessons[0];
+  var h='<h2>自主學習・'+esc(L.label)+' '+esc(L.title)+'</h2><p class="sub">自己控制進度；每一格都有一個「我學會了」可以按，系統只記錄，不催你。</p>';
+  h+='<div class="tabs">'+D.lessons.map(function(x){return '<button data-lesson="'+x.id+'" class="'+(x.id===studyLesson?'on':'')+'">'+esc(x.label)+' '+esc(x.title)+'</button>';}).join('')+'</div>';
+  h+='<div class="tabs" id="studyTabs">'+[['text','課文'],['cards','知識卡'],['struct','結構圖'],['map','心智圖'],['read','閱讀引導'],['write','寫作挑戰']].map(function(t){return '<button data-tab="'+t[0]+'" class="'+(studyTab===t[0]?'on':'')+'">'+t[1]+'</button>';}).join('')+'</div>';
+  h+='<div id="studyBody"></div>';
+  var el=$('#v-study');el.innerHTML=h;
+  el.onclick=onStudyClick;
+  renderStudyBody();
+}
+function onStudyClick(e){
+  var b=e.target.closest('button');
+  if(!b){var c=e.target.closest('.kcard[data-flip]');if(c)c.classList.toggle('open');return;}
+  if(b.dataset.lesson){studyLesson=b.dataset.lesson;cardFilter='全部';renderStudy();return;}
+  if(b.dataset.tab){studyTab=b.dataset.tab;renderStudy();return;}
+  if(b.dataset.cfilter){cardFilter=b.dataset.cfilter;renderStudyBody();return;}
+  if(b.dataset.known){var id=b.dataset.known;S.cards[id]=!S.cards[id];if(S.cards[id])touchDay();save();renderStudyBody();updateBadges();return;}
+  if(b.dataset.hint){var box=document.getElementById('h'+b.dataset.hint);if(box)box.style.display=box.style.display==='none'?'block':'none';return;}
+  if(b.dataset.ans){var ab=document.getElementById('a'+b.dataset.ans);if(ab)ab.style.display=ab.style.display==='none'?'block':'none';return;}
+  if(b.dataset.rate){var q=b.dataset.rate,v=b.dataset.v;S.check[studyLesson+'|'+q]=v;touchDay();save();renderStudyBody();return;}
+  if(b.dataset.rubric){var rk=studyLesson+'|r'+b.dataset.rubric;S.check[rk]=!S.check[rk];save();return;}
+  if(b.dataset.writesave){var ta=$('#writeArea');S.writing[studyLesson]=ta?ta.value:'';touchDay();save();b.textContent='已存檔 ✓';return;}
+}
+var RUBRIC=['我寫了具體的動作，不是只有「很好玩」「很開心」','我用到了至少一種感官（看／聽／聞／觸）','我用上了本課的修辭或句型','我檢查了有沒有重複的句子，段落有順序'];
+function renderStudyBody(){
+  var L=D.lessons.filter(function(x){return x.id===studyLesson;})[0],box=$('#studyBody'),h='';
+  if(studyTab==='text'){
+    h='<div class="panel"><h3>課文全文</h3><p class="sub">讀兩次：第一次默念圈不懂的詞，第二次念出聲，注意節奏。</p><pre class="text">'+H(L.text)+'</pre>'+
+      '<div style="margin-top:14px"><h3>課文導讀與主旨</h3><div style="white-space:pre-wrap;font-size:14px;color:#41556b">'+H(L.intro.slice(0,700))+'</div>'+
+      (L.mainIdea?'<p class="pill a" style="margin-top:10px">主旨：'+H(L.mainIdea)+'</p>':'')+'</div></div>';
+  }
+  if(studyTab==='cards'){
+    var types=['全部'].concat(Array.from(new Set(L.cards.map(function(c){return c.type;}))));
+    h='<div class="panel"><h3>知識卡（'+L.cards.length+' 張）</h3><p class="sub">點卡片展開，讀完按「我學會了」。已學會的會變綠色。</p><div class="tabs">'+types.map(function(t){return '<button data-cfilter="'+esc(t)+'" class="'+(cardFilter===t?'on':'')+'">'+esc(t)+'</button>';}).join('')+'</div>';
+    var list=L.cards.filter(function(c){return cardFilter==='全部'||c.type===cardFilter;});
+    if(list.some(function(c){return c.segs||(c.senses&&c.senses.length);}))h+=POS_LEGEND;
+    var seen=list.filter(function(c){return S.cards[studyLesson+'|'+c.type+'|'+c.title];}).length;
+    h+='<p class="sub">這一類已學會 '+seen+' / '+list.length+'　<span class="bar" style="display:inline-block;width:120px;vertical-align:middle;margin:0"><i style="width:'+pct(seen,list.length)+'%"></i></span></p><div class="grid">';
+    list.forEach(function(c,i){var id=studyLesson+'|'+c.type+'|'+c.title;var done=!!S.cards[id];
+      h+='<div class="kcard '+(done?'done':'')+'" data-flip="'+i+'"><div class="t">'+H(c.title)+'</div>'+posRow(c)+sensesRow(c)+(c.body?'<div class="b">'+C(c.body)+'</div>':'')+'<div class="tag">'+esc(c.type)+'</div>'+
+         '<button class="btn sm '+(done?'teal':'')+'" data-known="'+esc(id)+'" style="margin-top:8px">'+(done?'✓ 已學會':'我學會了')+'</button></div>';});
+    h+='</div></div>';
+  }
+  if(studyTab==='struct'){
+    h='<div class="panel"><h3>課文結構表</h3><p class="sub">原教材的結構表是圖片，直接嵌在這裡對照讀；下面的流程圖是「讀文章時該怎麼拆」的順序。</p>'+
+      (L.structureImg?'<img src="'+L.structureImg+'" style="max-width:100%;border:1px solid var(--line);border-radius:12px" alt="課文結構表">':'<p>本課結構圖未提供</p>')+
+      '<h3 style="margin-top:18px">'+esc(M.eventHeading||'讀一篇文章的順序')+'</h3>'+drawMermaid(D.diagrams.event)+'</div>';
+  }
+  if(studyTab==='map'){
+    h='<div class="panel"><h3>'+esc(L.label)+'心智圖</h3><p class="sub">由 Markmap 即時繪製：課文骨架 → 生字語詞 → 修辭句型 → 閱讀理解 → 學習任務。點節點展開／收合。</p>'+
+      '<svg class="mm" id="lessonMap"></svg></div>'+
+      '<div class="panel"><h3>心智圖要怎麼用</h3><p class="sub">先只看第一層，試著說出這一課在講什麼；再展開第二層檢查有沒有漏；最後蓋起來，自己重畫一次。</p>'+drawMermaid(D.diagrams.state)+'</div>';
+  }
+  if(studyTab==='read'){
+    h='<div class="panel"><h3>閱讀策略四步驟（Mermaid）</h3>'+drawMermaid(D.diagrams.strategy)+'</div>';
+    h+='<div class="panel"><h3>閱讀理解引導（'+L.reading.length+' 題）</h3><p class="sub">不要直接看答案。先按提示 1，再提示 2，想過之後才展開參考答案，最後自己評量。</p>';
+    L.reading.forEach(function(r,i){
+      var key=studyLesson+'|'+i,rate=S.check[key];
+      h+='<div class="stepbox"><div class="q">'+H((i+1)+'. '+r.q)+' <span class="pill t">'+esc(r.ability)+'</span></div>'+
+        '<div class="row"><button class="btn sm" data-hint="'+i+'">提示 1</button><button class="btn sm" data-hint="b'+i+'">提示 2</button><button class="btn sm teal" data-ans="'+i+'">看參考答案</button></div>'+
+        '<div class="hint" id="h'+i+'" style="display:none">提示 1：先圈出題目問的是「誰、在哪裡、做什麼、為什麼」，再回課文找對應的句子。</div>'+
+        '<div class="hint" id="hb'+i+'" style="display:none">提示 2：這題屬於「'+esc(r.ability)+'」。'+esc(r.ability==='提取訊息'?'答案通常直接寫在課文裡，找關鍵詞就好。':r.ability==='推論訊息'?'答案沒明講，要從作者寫的動作、景象去推心情和原因。':'把各段連起來想，再說說自己的理由。')+'</div>'+
+        '<div class="ansbox" id="a'+i+'" style="display:none"><b>參考答案：</b>'+H(r.answers.join('／')||'本題為開放題，想法合理即可')+'</div>'+
+        '<div class="row" style="margin-top:10px"><span class="sub" style="margin:0">自我評量：</span>'+
+        '<button class="btn sm '+(rate==='ok'?'on':'')+'" data-rate="'+i+'" data-v="ok">我會了</button>'+
+        '<button class="btn sm '+(rate==='again'?'on':'')+'" data-rate="'+i+'" data-v="again">還要再想</button></div></div>';
+    });
+    h+='</div><div class="panel"><h3>MAPS 深度提問（原教材）</h3><pre class="text" style="font-size:14px">'+H(L.mapsText.slice(0,1200))+'</pre></div>';
+  }
+  if(studyTab==='write'){
+    h='<div class="panel"><h3>寫作挑戰：'+esc(L.write||M.writeTopic||'換我來寫')+'</h3><p class="sub">開放題沒有標準答案，用自我檢核代替批改。寫完存檔，之後可以回來改。</p>'+
+      '<div class="row" style="margin-bottom:12px">'+drawMermaid('flowchart LR\n  A["自學：讀範例"] --> B["思考：找素材"] --> C["表達：寫下來"] --> D["檢核：改一遍"]')+'</div>'+
+      '<h3>教材引導重點</h3><pre class="text" style="font-size:14px">'+H(L.sidaText.slice(0,650))+'</pre>'+
+      '<h3 style="margin-top:18px">換我來寫：'+esc(L.write||M.writeTopic||'我的想法')+'</h3><textarea id="writeArea" placeholder="寫下你的想法：做了什麼、看到什麼、心裡感覺怎樣…">'+esc(S.writing[studyLesson]||'')+'</textarea>'+
+      '<div class="row" style="margin-top:10px"><button class="btn primary" data-writesave="1">存檔</button><span class="sub" style="margin:0">存在這台電腦的瀏覽器裡，不會上傳</span></div>'+
+      '<h3 style="margin-top:20px">寫完自己檢查</h3>';
+    RUBRIC.forEach(function(r,i){var k=studyLesson+'|r'+i;h+='<label class="chk"><input type="checkbox" data-rubric="'+i+'" '+(S.check[k]?'checked':'')+'>'+esc(r)+'</label>';});
+    h+='</div>';
+  }
+  box.innerHTML=h;
+  runMermaid(box);
+  if(studyTab==='map')drawMarkmap(L.markmap,$('#lessonMap'));
+  if(studyTab==='write'){$$('[data-rubric]',box).forEach(function(c){c.addEventListener('change',function(){var k=studyLesson+'|r'+c.dataset.rubric;S.check[k]=c.checked;touchDay();save();});});}
+}
+
+/* ---------- EXTRA：我會自己讀 ---------- */
+var extraId=(D.extra&&D.extra[0]?D.extra[0].id:''),extraTab='text';
+function curExtra(){return (D.extra||[]).filter(function(x){return x.id===extraId;})[0]||(D.extra||[])[0]||{id:'',label:'',title:'',text:'',reading:[],markmap:null};}
+function renderExtra(){
+  var E=curExtra(),el=$('#v-extra');
+  if(!D.extra||!D.extra.length){el.innerHTML='<div class="panel"><p>這一本沒有額外自讀教材。</p></div>';return;}
+  var h='<h2>我會自己讀・'+esc(E.label)+' '+esc(E.title)+'</h2>'+
+    '<p class="sub">這裡不打分數。照著「預測 → 提問 → 統整 → 說想法」自己走一遍，讀完按一下「我讀完了」就好。</p>';
+  h+='<div class="tabs">'+D.extra.map(function(x){return '<button data-xlesson="'+x.id+'" class="'+(x.id===E.id?'on':'')+'">'+esc(x.label)+' '+esc(x.title)+'</button>';}).join('')+'</div>';
+  h+='<div class="tabs" id="extraTabs">'+[['text','讀一讀'],['read','想一想'],['map','心智圖']].map(function(t){return '<button data-xtab="'+t[0]+'" class="'+(extraTab===t[0]?'on':'')+'">'+t[1]+'</button>';}).join('')+'</div>';
+  h+='<div id="extraBody"></div>';
+  el.innerHTML=h;
+  el.onclick=onExtraClick;
+  renderExtraBody();
+}
+function onExtraClick(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.xlesson){extraId=b.dataset.xlesson;extraTab='text';renderExtra();return;}
+  if(b.dataset.xtab){extraTab=b.dataset.xtab;renderExtra();return;}
+  if(b.dataset.xdone){S.extra[extraId]=!S.extra[extraId];if(S.extra[extraId])touchDay();save();renderExtraBody();return;}
+  if(b.dataset.xhint){var hb=document.getElementById('x'+b.dataset.xhint);if(hb)hb.style.display=hb.style.display==='none'?'block':'none';return;}
+  if(b.dataset.xans){var ab=document.getElementById('xa'+b.dataset.xans);if(ab)ab.style.display=ab.style.display==='none'?'block':'none';return;}
+  if(b.dataset.xrate){S.check['x|'+extraId+'|'+b.dataset.xrate]=b.dataset.xv;touchDay();save();renderExtraBody();}
+}
+function renderExtraBody(){
+  var E=curExtra(),box=$('#extraBody');if(!box)return;
+  var h='';
+  if(extraTab==='text'){
+    h='<div class="panel"><h3>課文全文</h3><p class="sub">'+esc(E.genre)+'｜'+esc(E.focus)+'。先默讀一次，再念出聲一次。</p>'+
+      '<pre class="text">'+H(E.text)+'</pre>'+
+      '<div class="row" style="margin-top:14px"><button class="btn primary '+(S.extra[E.id]?'teal':'')+'" data-xdone="1">'+(S.extra[E.id]?'✓ 我讀完了':'我讀完了')+'</button>'+
+      '<span class="sub" style="margin:0">讀完再按「想一想」，用四個層次的問題檢查自己讀懂了沒。</span></div></div>';
+    h+='<div class="panel"><h3>自己讀的流程（Mermaid）</h3>'+drawMermaid('flowchart LR\n  A["看課名・預測"] --> B["邊讀邊提問"] --> C["圈人事物"] --> D["三句話說大意"] --> E["說出我的想法與理由"]')+'</div>';
+  }
+  if(extraTab==='read'){
+    h='<div class="panel"><h3>四個層次的提問（'+E.reading.length+' 題）</h3><p class="sub">先自己想，再看提示；開放題沒有標準答案，重點是理由要跟文章有關。</p>';
+    E.reading.forEach(function(r,i){
+      var key='x|'+E.id+'|'+i,rate=S.check[key];
+      h+='<div class="stepbox"><div class="q">'+H((i+1)+'. '+r.q)+' <span class="pill t">'+esc(r.ability)+'</span></div>'+
+        '<div class="row"><button class="btn sm" data-xhint="'+i+'">看提示</button><button class="btn sm teal" data-xans="'+i+'">看答題方向</button></div>'+
+        '<div class="hint" id="x'+i+'" style="display:none">'+H(r.hint||'回文章裡找關鍵句子，再想想作者為什麼這樣寫。')+'</div>'+
+        '<div class="ansbox" id="xa'+i+'" style="display:none"><b>答題方向：</b>'+H(r.tip||r.answers.join('／')||'想法合理、能舉出課文句子就可以')+'</div>'+
+        '<div class="row" style="margin-top:10px"><span class="sub" style="margin:0">自我評量：</span>'+
+        '<button class="btn sm '+(rate==='ok'?'on':'')+'" data-xrate="'+i+'" data-xv="ok">我會了</button>'+
+        '<button class="btn sm '+(rate==='again'?'on':'')+'" data-xrate="'+i+'" data-xv="again">還要再想</button></div></div>';
+    });
+    h+='</div><div class="panel"><h3>閱讀策略四步驟（Mermaid）</h3>'+drawMermaid(D.diagrams.strategy)+'</div>';
+  }
+  if(extraTab==='map'){
+    h='<div class="panel"><h3>'+esc(E.title)+'・自讀心智圖（Markmap）</h3><p class="sub">先只看第一層，試著說出這篇在講什麼；蓋起來再自己重畫一次。</p>'+
+      '<svg class="mm" id="extraMap"></svg></div>'+
+      '<div class="panel"><h3>我讀到哪一關了</h3>'+drawMermaid(D.diagrams.state)+'</div>';
+  }
+  box.innerHTML=h;runMermaid(box);
+  if(extraTab==='map')drawMarkmap(E.markmap,$('#extraMap'));
+}
+
+/* ---------- QUIZ ---------- */
+var quizLesson=(D.lessons[0]||{}).id,quizCat='all',quizMode='instant',quizOnlyWrong=false,Q=null,qi=0,qStart=0,qTimer=null;
+function pool(){var p=D.quiz.filter(function(q){return (quizLesson==='all'||q.lesson===quizLesson)&&(quizCat==='all'||q.cat===quizCat)&&(!quizOnlyWrong||S.wrong[q.id]);});return p;}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function startQuiz(){var p=shuffle(pool().slice());if(!p.length){Q=null;return;}p=p.slice(0,Math.min(10,p.length));Q={list:p,ans:[],mode:quizMode};qi=0;qStart=Date.now();if(qTimer)clearInterval(qTimer);qTimer=setInterval(function(){var el=$('#qtime');if(el)el.textContent=fmt(Date.now()-qStart);},1000);}
+function fmt(ms){var s=Math.floor(ms/1000);return ('0'+Math.floor(s/60)).slice(-2)+':'+('0'+(s%60)).slice(-2);}
+function beep(ok){try{var C=window.AudioContext||window.webkitAudioContext;if(!C)return;var c=new C(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=ok?660:280;g.gain.value=.06;o.start();o.stop(c.currentTime+.16);setTimeout(function(){c.close();},300);}catch(e){}}
+function renderQuiz(){
+  var h='<h2>自動測驗</h2><p class="sub">題目與標準答案由教材「學用版」的隱藏答案自動解析；每個錯項都會告訴你它原本該填在哪裡。</p>';
+  h+='<div class="panel"><div class="row">'+
+    '<select id="qLesson" class="btn"><option value="all">'+esc(ALL_LABEL)+'</option>'+D.lessons.map(function(l){return '<option value="'+l.id+'" '+(quizLesson===l.id?'selected':'')+'>'+esc(l.label)+' '+esc(l.title)+'</option>';}).join('')+'</select>'+
+    '<select id="qCat" class="btn"><option value="all">全部題型</option>'+Object.keys(CATJS).map(function(k){return '<option value="'+k+'" '+(quizCat===k?'selected':'')+'>'+esc(CATJS[k].label)+'</option>';}).join('')+'</select>'+
+    '<button class="btn sm '+(quizMode==='instant'?'on':'')+'" id="mInstant">即時訂正</button>'+
+    '<button class="btn sm '+(quizMode==='exam'?'on':'')+'" id="mExam">考試模式</button>'+
+    '<button class="btn sm '+(quizOnlyWrong?'on':'')+'" id="mWrong">只考錯題</button>'+
+    '<button class="btn primary sm" id="qStart">開始 / 重新出卷</button></div>'+
+    '<p class="sub" style="margin:10px 0 0">符合條件的題目：<b id="poolN">0</b> 題，每卷最多 10 題。鍵盤 1～4 可選答案。</p></div>';
+  h+='<div id="qArea"></div>';
+  var el=$('#v-quiz');el.innerHTML=h;$('#poolN').textContent=pool().length;
+  $('#qLesson').onchange=function(){quizLesson=this.value;renderQuiz();};
+  $('#qCat').onchange=function(){quizCat=this.value;renderQuiz();};
+  $('#mInstant').onclick=function(){quizMode='instant';renderQuiz();};
+  $('#mExam').onclick=function(){quizMode='exam';renderQuiz();};
+  $('#mWrong').onclick=function(){quizOnlyWrong=!quizOnlyWrong;renderQuiz();};
+  $('#qStart').onclick=function(){startQuiz();renderQuizBody();};
+  renderQuizBody();
+}
+var CATJS={preview:{label:'預習單'},words:{label:'字詞句練習單'},idiom:{label:'成語加油站'},maps:{label:'MAPS 提問單'},write:{label:'一課一練筆'}};
+function renderQuizBody(){
+  var area=$('#qArea');if(!area)return;
+  if(!Q&&pool().length){startQuiz();}
+  if(!Q||!Q.list.length){area.innerHTML='<div class="panel"><p>這個範圍還沒有題目。換一個範圍，或先到「自主學習」翻幾張知識卡。</p></div>';return;}
+  if(qi>=Q.list.length){finishQuiz();return;}
+  var q=Q.list[qi],done=Q.ans[qi];
+  var h='<div class="row" style="justify-content:space-between"><div class="sub" style="margin:0">第 '+(qi+1)+' / '+Q.list.length+' 題　<span class="pill t">'+esc(q.label)+'</span> <span class="pill a">'+esc(q.dim)+'</span></div><div class="timer" id="qtime">'+fmt(Date.now()-qStart)+'</div></div>';
+  h+='<div class="bar"><i style="width:'+pct(qi,Q.list.length)+'%"></i></div>';
+  h+='<div class="qnav">'+Q.list.map(function(x,i){var a=Q.ans[i];return '<button data-jump="'+i+'" class="'+(i===qi?'cur':a?(a.ok?'ok':'no'):'')+'">'+(i+1)+'</button>';}).join('')+'</div>';
+  h+='<div class="qbox"><div class="sub" style="margin:0">請選出正確的答案，放進【＿＿】裡。</div><div class="qstem">'+H(q.q)+'</div>';
+  q.options.forEach(function(o,i){var cls='opt';if(done){cls+=' dis';if(o.ok)cls+=' right';if(done.sel===i&&!o.ok)cls+=' wrong';}
+    h+='<button class="'+cls+'" data-opt="'+i+'"><span class="k">'+(i+1)+'</span>'+H(o.t)+'</button>';});
+  if(done&&Q.mode==='instant'){
+    h+='<div class="explain"><b>'+(done.ok?'答對了！':'再記一下：')+'</b>　'+H(q.explain)+
+       q.options.map(function(o){return '<span class="why '+(o.ok?'good':'bad')+'">'+H(o.t)+'：'+H(o.why)+'</span>';}).join('')+'</div>';
+  }
+  h+='<div class="row" style="margin-top:16px"><button class="btn sm" data-jump="'+(qi-1)+'" '+(qi===0?'disabled':'')+'>上一題</button>'+
+     '<button class="btn primary sm" id="qNext">'+(qi===Q.list.length-1?'看結果':'下一題')+'</button>'+
+     '<span class="sub" style="margin:0">答對 '+Q.ans.filter(function(a){return a&&a.ok;}).length+' / '+Q.ans.filter(Boolean).length+'</span></div>';
+  h+='</div><div class="panel" style="margin-top:14px"><h3>答錯要去哪裡</h3><p class="sub" style="margin:0">答錯的題會自動進錯題本。用 Mermaid 看一遍訂正路線：</p>'+drawMermaid('flowchart LR\n  A["答錯"] --> B["看解析"] --> C["錯題本"] --> D["只考錯題"] --> E["連兩次答對"] --> F["移出錯題本"]')+'</div>';
+  area.innerHTML=h;
+  runMermaid(area);
+  $$('[data-opt]',area).forEach(function(b){b.onclick=function(){answer(parseInt(b.dataset.opt,10));};});
+  $$('[data-jump]',area).forEach(function(b){b.onclick=function(){var n=parseInt(b.dataset.jump,10);if(n>=0&&n<Q.list.length){qi=n;renderQuizBody();}};});
+  $('#qNext').onclick=function(){qi++;renderQuizBody();};
+}
+function answer(i){
+  if(!Q||Q.ans[qi])return;
+  var q=Q.list[qi],ok=!!q.options[i].ok;
+  Q.ans[qi]={sel:i,ok:ok};
+  var rec=S.quiz[q.id]||{right:0,wrong:0};if(ok){rec.right++;if(S.wrong[q.id]){S.wrong[q.id]--;if(S.wrong[q.id]<=0)delete S.wrong[q.id];}}else{rec.wrong++;S.wrong[q.id]=(S.wrong[q.id]||0)+1;}
+  S.quiz[q.id]=rec;touchDay();save();beep(ok);renderQuizBody();
+}
+function finishQuiz(){
+  if(qTimer){clearInterval(qTimer);qTimer=null;}
+  var right=Q.ans.filter(function(a){return a&&a.ok;}).length,total=Q.list.length,score=Math.round(right/total*100);
+  var lid=(Q.list[0]||{}).lesson||'all';
+  if(lid!=='all'&&score>(S.best[lid]||0))S.best[lid]=score;
+  S.sessions.push({date:today(),lesson:lid,total:total,right:right,score:score});
+  if(S.sessions.length>60)S.sessions=S.sessions.slice(-60);save();
+  var h='<div class="panel" style="text-align:center"><h2 style="font-size:26px">'+(score>=80?'過關了！':'再練一次就熟了')+'</h2>'+
+    '<p style="font-size:44px;margin:6px 0;color:var(--blue);font-weight:600">'+score+' <span style="font-size:18px">分</span></p>'+
+    '<p class="sub">答對 '+right+' / '+total+' 題　用時 '+fmt(Date.now()-qStart)+'</p>'+
+    '<div class="row" style="justify-content:center"><button class="btn primary" id="again">再出一卷</button><button class="btn" id="goWrong">去看錯題本</button></div></div>';
+  if(Q.mode==='exam'){
+    h+='<div class="panel"><h3>逐題檢討</h3>';
+    Q.list.forEach(function(q,i){var a=Q.ans[i];h+='<div class="stepbox"><div class="q">'+(i+1)+'. '+H(q.q)+'　'+(a&&a.ok?'<span class="chip g">答對</span>':'<span class="chip r">答錯</span>')+'</div>'+
+      '<div class="ansbox">正解：'+H(q.a)+'　'+H(q.explain)+'</div>'+
+      q.options.filter(function(o){return !o.ok;}).map(function(o){return '<div class="hint">'+H(o.t)+'：'+H(o.why)+'</div>';}).join('')+'</div>';});
+    h+='</div>';
+  }
+  $('#qArea').innerHTML=h;
+  $('#again').onclick=function(){startQuiz();renderQuizBody();};
+  $('#goWrong').onclick=function(){go('wrong');};
+  updateBadges();
+}
+
+/* ---------- WRONG BOOK ---------- */
+function renderWrong(){
+  var ids=Object.keys(S.wrong).filter(function(id){return D.quiz.some(function(q){return q.id===id;});});
+  var h='<h2>錯題本</h2><p class="sub">同一題連續答對兩次才會自動移出。目前 '+ids.length+' 題待清。</p>';
+  if(!ids.length){h+='<div class="panel"><p>目前沒有錯題，很好！去測驗一卷吧。</p></div>';}
+  else{
+    h+='<div class="row" style="margin-bottom:14px"><button class="btn primary" id="drill">只考這些錯題（10 題）</button><button class="btn" id="clearWrong">全部清除</button></div>';
+    var byLesson={};ids.forEach(function(id){var q=D.quiz.filter(function(x){return x.id===id;})[0];(byLesson[q.lesson]=byLesson[q.lesson]||[]).push(q);});
+    Object.keys(byLesson).forEach(function(lid){var L=D.lessons.filter(function(x){return x.id===lid;})[0]||{title:lid};
+      h+='<div class="panel"><h3>'+esc(L.title)+'　'+byLesson[lid].length+' 題</h3>';
+      byLesson[lid].forEach(function(q){h+='<div class="stepbox"><div class="q">'+H(q.q)+' <span class="pill">'+esc(q.dim)+'</span> <span class="chip r">錯 '+S.wrong[q.id]+' 次</span></div>'+
+        '<div class="ansbox">正解：<b>'+H(q.a)+'</b>　'+H(q.explain)+'</div></div>';});
+      h+='</div>';});
+  }
+  h+='<div class="panel"><h3>錯題是怎麼消失的</h3>'+drawMermaid('flowchart LR\n  A["進錯題本"] --> B["重做"] --> C{"答對？"}\n  C -->|否| B\n  C -->|是| D["計數減一"] --> E{"歸零？"}\n  E -->|否| B\n  E -->|是| F["移出錯題本"]')+'</div>';
+  var el=$('#v-wrong');el.innerHTML=h;runMermaid(el);
+  var db=$('#drill'),cb=$('#clearWrong');
+  if(db)db.onclick=function(){quizOnlyWrong=true;quizLesson='all';quizCat='all';startQuiz();go('quiz');};
+  if(cb)cb.onclick=function(){S.wrong={};save();renderWrong();};
+}
+
+/* ---------- PROGRESS ---------- */
+var DIMS=['生字語詞','課文理解','閱讀策略','寫作表達'];
+function renderProgress(){
+  var totalAns=0,totalRight=0;Object.keys(S.quiz).forEach(function(k){totalAns+=S.quiz[k].right+S.quiz[k].wrong;totalRight+=S.quiz[k].right;});
+  var h='<h2>進度與成就</h2><p class="sub">全部記錄只存在這台電腦，按「家長總覽」可以把這一页印出來。</p>';
+  h+='<div class="panel"><div class="row" style="gap:28px"><div><div class="sub" style="margin:0">累計作答</div><b style="font-size:26px">'+totalAns+'</b> 題</div>'+
+     '<div><div class="sub" style="margin:0">整體正確率</div><b style="font-size:26px">'+pct(totalRight,totalAns)+'%</b></div>'+
+     '<div><div class="sub" style="margin:0">連續學習</div><b style="font-size:26px">'+S.streak.count+'</b> 天</div>'+
+     '<div><div class="sub" style="margin:0">已完成知識卡</div><b style="font-size:26px">'+Object.values(S.cards).filter(Boolean).length+'</b> 張</div></div></div>';
+  h+='<div class="panel"><h3>各課完成度</h3><table><tr><th>課次</th><th>知識卡</th><th>題庫</th><th>最佳成績</th><th>完成度</th></tr>';
+  D.lessons.forEach(function(L){var q=D.quiz.filter(function(x){return x.lesson===L.id;});var seen=L.cards.filter(function(c){return S.cards[L.id+'|'+c.type+'|'+c.title];}).length;var done=q.filter(function(x){return S.quiz[x.id]&&S.quiz[x.id].right>0;}).length;
+    h+='<tr><td>'+esc(L.label)+' '+esc(L.title)+'</td><td>'+seen+'/'+L.cards.length+'</td><td>'+done+'/'+q.length+'</td><td>'+bestScore(L.id)+' 分</td><td><div class="bar" style="width:120px;margin:0"><i style="width:'+lessonDone(L.id)+'%"></i></div>'+lessonDone(L.id)+'%</td></tr>';});
+  h+='</table></div>';
+  h+='<div class="panel"><h3>四個能力向度</h3><table><tr><th>向度</th><th>作答</th><th>正確率</th><th>分布</th></tr>';
+  DIMS.forEach(function(dim){var qs=D.quiz.filter(function(q){return q.dim===dim;});var a=0,r=0;qs.forEach(function(q){var s=S.quiz[q.id];if(s){a+=s.right+s.wrong;r+=s.right;}});
+    h+='<tr><td>'+dim+'</td><td>'+a+' 題</td><td>'+pct(r,a)+'%</td><td><div class="bar" style="width:180px;margin:0"><i style="width:'+pct(r,a)+'%"></i></div></td></tr>';});
+  h+='</table><p class="sub" style="margin-top:12px">同一向度若正確率偏低，先回「自主學習」翻知識卡，再回來測，會比一直刷題有效。</p></div>';
+  h+='<div class="panel"><h3>學習狀態圖（Mermaid）</h3>'+drawMermaid(D.diagrams.state)+'</div>';
+  h+='<div class="panel"><h3>最近 10 次測驗</h3>'+(S.sessions.length?'<table><tr><th>日期</th><th>範圍</th><th>答對</th><th>分數</th></tr>'+S.sessions.slice(-10).reverse().map(function(s){var L=D.lessons.filter(function(x){return x.id===s.lesson;})[0];return '<tr><td>'+s.date+'</td><td>'+esc(L?L.title:(s.lesson==='all'?ALL_LABEL:s.lesson))+'</td><td>'+s.right+'/'+s.total+'</td><td>'+s.score+' 分</td></tr>';}).join('')+'</table>':'<p class="sub">還沒有測驗紀錄。</p>')+'</div>';
+  if(D.extra&&D.extra.length){
+    h+='<div class="panel"><h3>我會自己讀・閱讀紀錄</h3><table><tr><th>篇名</th><th>讀完了</th><th>四層次提問自評</th></tr>'+
+      D.extra.map(function(E){var ok=E.reading.filter(function(r,i){return S.check['x|'+E.id+'|'+i]==='ok';}).length;
+        return '<tr><td>'+esc(E.label)+' '+esc(E.title)+'</td><td>'+(S.extra[E.id]?'<span class="chip g">已完成</span>':'<span class="chip">還沒</span>')+'</td><td>'+ok+' / '+E.reading.length+' 題我會了</td></tr>';}).join('')+'</table></div>';
+  }
+  var cardsSeen=Object.values(S.cards).filter(Boolean).length;
+  var ach=[['第一次作答',totalAns>0],['翻完 20 張卡',cardsSeen>=20],['單課 80 分',Object.values(S.best).some(function(x){return x>=80;})],['清空錯題本',totalAns>0&&!Object.keys(S.wrong).length],['連續 3 天',S.streak.count>=3],['讀完自讀教材',(D.extra||[]).length>0&&D.extra.every(function(E){return !!S.extra[E.id];})],[M.achAll||ALL_LABEL+'過關',D.lessons.every(function(L){return bestScore(L.id)>=80;})]];
+  h+='<div class="panel"><h3>成就徽章</h3><div class="ach">'+ach.map(function(a){return '<div class="'+(a[1]?'':'lock')+'"><b>'+(a[1]?'★':'☆')+'</b>'+a[0]+'</div>';}).join('')+'</div></div>';
+  h+='<div class="panel"><h3>家長總覽（可直接列印）</h3><p class="sub">建議看「最佳成績」和「連續學習天數」就好，不要盯單次分數；錯題本有在變少，就代表有效。</p>'+
+     '<div class="row"><button class="btn" onclick="window.print()">列印本頁</button><button class="btn" id="exportBtn">匯出學習紀錄 JSON</button><button class="btn" id="resetBtn" style="color:var(--red)">清空所有紀錄</button></div></div>';
+  var el=$('#v-progress');el.innerHTML=h;runMermaid(el);
+  $('#exportBtn').onclick=function(){var blob=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='國語自主學習紀錄.json';a.click();};
+  $('#resetBtn').onclick=function(){if(confirm('確定清空所有學習紀錄？這個動作不能復原。')){localStorage.removeItem(KEY);location.reload();}};
+}
+function updateBadges(){$('#streak').textContent='連續學習 '+S.streak.count+' 天';var n=0;Object.keys(S.quiz).forEach(function(k){n+=S.quiz[k].right+S.quiz[k].wrong;});$('#totalBadge').textContent='累計作答 '+n+' 題';}
+function renderAll(){if(view==='home')renderHome();else if(view==='study')renderStudy();else if(view==='extra')renderExtra();else if(view==='quiz')renderQuiz();else if(view==='wrong')renderWrong();else if(view==='progress')renderProgress();updateBadges();}
+window.addEventListener('keydown',function(e){if(view!=='quiz'||!Q||qi>=Q.list.length)return;if(/^[1-4]$/.test(e.key)){answer(parseInt(e.key,10)-1);}if(e.key==='Enter'){var n=$('#qNext');if(n)n.click();}});
+if(!D.extra||!D.extra.length){var ne=$('#navExtra');if(ne)ne.style.display='none';}
+renderAll();
+window.__APP_OK__=true;
+})();
+</script>
+</body>
+</html>
