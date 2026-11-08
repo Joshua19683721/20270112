@@ -57,29 +57,39 @@
   }
 
   var voice = null;
+  var TTS_RATE = 0.65;          // 學習用慢速
+  var TTS_LANG = "en-US";
   function pickVoice() {
     if (!window.speechSynthesis) return;
     var vs = window.speechSynthesis.getVoices() || [];
+    var best = null;
     for (var i = 0; i < vs.length; i++) {
-      if (/en[-_]US/i.test(vs[i].lang)) { voice = vs[i]; break; }
-    }
-    if (!voice) {
-      for (var j = 0; j < vs.length; j++) {
-        if (/^en/i.test(vs[j].lang)) { voice = vs[j]; break; }
+      if (/^en[-_]US/i.test(vs[i].lang)) {
+        // 優先挑標記 en-US 的語音；同名再挑 localService 的
+        if (!best || vs[i].localService) best = vs[i];
       }
     }
+    if (!best) {
+      for (var j = 0; j < vs.length; j++) {
+        if (/^en/i.test(vs[j].lang)) { best = vs[j]; break; }
+      }
+    }
+    if (best) voice = best;
   }
   if (window.speechSynthesis) {
     pickVoice();
     window.speechSynthesis.onvoiceschanged = pickVoice;
+    setTimeout(pickVoice, 400);
   }
   function speak(text) {
+    if (!text) return;
     if (!window.speechSynthesis) { toast("這個瀏覽器不支援語音"); return; }
     try {
       window.speechSynthesis.cancel();
-      var u = new SpeechSynthesisUtterance(text);
-      u.lang = "en-US";
-      u.rate = 0.85;
+      var u = new SpeechSynthesisUtterance(String(text));
+      u.lang = TTS_LANG;
+      u.rate = TTS_RATE;
+      u.pitch = 1;
       if (voice) u.voice = voice;
       window.speechSynthesis.speak(u);
     } catch (e) {}
@@ -145,6 +155,7 @@
     h.push('<h1>' + H(V.vol) + ' 英語自主學習</h1>');
     h.push('<div class="sub">' + H(V.sub || "康軒 Wonder World") + " · " + V.lessons.length +
       " 個單元 · " + vs.total + " 題</div>");
+    h.push('<div class="ttsn">🔊 點任何英文都會發音：en-US · 語速 0.65×（慢速）</div>');
     h.push('<div class="stat">');
     h.push("<div><b>" + vs.done + "</b>已答對題數</div>");
     h.push("<div><b>" + pct(vs.done, vs.total) + "%</b>完成度</div>");
@@ -253,6 +264,20 @@
       }
       h.push("</div>");
       h.push('<img src="' + src + '" alt="' + H("P" + p.n) + '" onclick="APP.zoom(this.src)">');
+      if (p.ocr && p.ocr.length) {
+        var badge = p.ocrm === "ab" ? "雙模型驗證" : "單模型讀取";
+        h.push('<div class="ocr"><div class="oh">📝 頁面文字<span class="vd">OCR ' + badge + '</span>' +
+          "<span style=\"font-weight:600;color:#9aa6c8\">點句子聽發音</span></div>");
+        p.ocr.forEach(function (o) {
+          h.push('<div class="ocrline" onclick="APP.say(' +
+            JSON.stringify(o.t).replace(/"/g, "&quot;") + ')">' +
+            '<div class="t">' + H(o.t) + "</div>" +
+            (o.ipa ? '<span class="ipa">' + H(o.ipa) + "</span>" : "") +
+            (o.zh ? '<div class="zh">' + H(o.zh) + "</div>" : "") +
+            "</div>");
+        });
+        h.push("</div>");
+      }
       h.push("</div>");
     });
     h.push('<div class="tiny" style="text-align:center;margin-top:6px">' +
@@ -273,12 +298,19 @@
       if (c.list && c.list.length) {
         h.push('<div class="kv">');
         c.list.forEach(function (r) {
-          h.push('<div class="r"><b>' + H(r[0]) + "</b><span>" + H(r[1] || "") +
+          h.push('<div class="r"><b onclick="APP.say(' + JSON.stringify(r[0]).replace(/"/g, "&quot;") +
+            ')">' + H(r[0]) + (r[3] ? '<span class="ipa">' + H(r[3]) + "</span>" : "") +
+            "</b><span>" + H(r[1] || "") +
             (r[2] ? "　·　" + H(r[2]) : "") + "</span></div>");
         });
         h.push("</div>");
       }
-      if (c.ask) h.push('<div class="ask">💡 ' + H(c.ask) + "</div>");
+      if (c.ask) {
+        h.push('<div class="ask" onclick="APP.say(' +
+          JSON.stringify(c.ask.split("／")[0].split(" — ")[0]).replace(/"/g, "&quot;") +
+          ')">💡 ' + H(c.ask) +
+          (c.ask_ipa ? '<span class="ipa">' + H(c.ask_ipa) + "</span>" : "") + "</div>");
+      }
       h.push("</div>");
     });
     return h.join("");
@@ -301,15 +333,26 @@
   function tabWord(L) {
     var ws = L.words || [];
     if (!ws.length) return emptyBox("這一課沒有整理到單字卡");
-    var h = ['<div class="sec-title">單字卡 <small>點 🔊 聽發音</small></div><div class="wgrid">'];
+    var h = ['<div class="sec-title">單字卡 <small>點單字聽發音 · 藍色是音標</small></div><div class="wgrid">'];
     ws.forEach(function (w, i) {
-      h.push('<div class="wcard"><div class="rel">');
-      if (w.img && IM[w.img]) h.push('<div class="ph">' + imgTag(w.img, w.w) + "</div>");
-      else h.push('<div class="ph"><span class="ini">' + H(initial(w.w)) + "</span></div>");
-      h.push('<button class="spk" onclick="APP.word(' + JSON.stringify(w.w).replace(/"/g, "&quot;") +
-        "," + JSON.stringify(w.au || "") + ')">🔊</button>');
-      h.push("</div><div class=\"bd\">");
-      h.push('<div class="w">' + H(w.w) + "</div>");
+      var hasImg = !!(w.img && IM[w.img]);
+      var say = 'APP.say(' + JSON.stringify(w.w).replace(/"/g, "&quot;") + ')';
+      h.push('<div class="wcard' + (hasImg ? "" : " flat") + '">');
+      if (hasImg) {
+        h.push('<div class="rel"><div class="ph">' + imgTag(w.img, w.w) + "</div>");
+        h.push('<button class="spk" title="課本原音" onclick="APP.word(' +
+          JSON.stringify(w.w).replace(/"/g, "&quot;") + "," +
+          JSON.stringify(w.au || "") + ')">🔊</button></div>');
+      }
+      h.push('<div class="bd">');
+      h.push('<div class="wtop"><span class="w" onclick="' + say + '">' + H(w.w) + "</span>");
+      if (!hasImg) {
+        h.push('<button class="spk in" title="聽發音" onclick="APP.word(' +
+          JSON.stringify(w.w).replace(/"/g, "&quot;") + "," +
+          JSON.stringify(w.au || "") + ')">🔊</button>');
+      }
+      h.push("</div>");
+      if (w.ipa) h.push('<span class="ipa">' + H(w.ipa) + "</span>");
       if (w.zh) h.push('<div class="zh">' + H(w.zh) + "</div>");
       h.push("</div></div>");
     });
@@ -326,6 +369,7 @@
       if (s.tag) h.push('<span class="tag">' + H(s.tag) + "</span>");
       h.push('<div class="en" style="cursor:pointer" onclick="APP.say(' +
         JSON.stringify(s.en).replace(/"/g, "&quot;") + ')">' + H(s.en) + "</div>");
+      if (s.ipa) h.push('<span class="ipa">' + H(s.ipa) + "</span>");
       if (s.zh) h.push('<div class="zh">' + H(s.zh) + "</div>");
       if (s.note) {
         var warn = /^★/.test(s.note);
@@ -346,18 +390,18 @@
       if (p.rule) h.push('<div class="rule">' + H(p.rule) + "</div>");
       if (p.short && p.short.length) {
         h.push('<div class="grp"><div class="lb">短母音</div><div class="exs">');
-        p.short.forEach(function (w) { h.push(exBtn(w)); });
+        p.short.forEach(function (w) { h.push(exBtn(w, p.ipad)); });
         h.push("</div></div>");
       }
       if (p.long && p.long.length) {
         h.push('<div class="grp"><div class="lb long">長母音（魔法 e）</div><div class="exs">');
-        p.long.forEach(function (w) { h.push(exBtn(w)); });
+        p.long.forEach(function (w) { h.push(exBtn(w, p.ipad)); });
         h.push("</div></div>");
       }
       if (p.pairs && p.pairs.length) {
         h.push('<div class="grp"><div class="lb">聽辨對照</div>');
         p.pairs.forEach(function (pr) {
-          h.push('<div class="pair">' + exBtn(pr[0]) + '<span class="ar">↔</span>' + exBtn(pr[1]) + "</div>");
+          h.push('<div class="pair">' + exBtn(pr[0], p.ipad) + '<span class="ar">↔</span>' + exBtn(pr[1], p.ipad) + "</div>");
         });
         h.push("</div>");
       }
@@ -371,9 +415,11 @@
     return h.join("");
   }
 
-  function exBtn(w) {
+  function exBtn(w, ipad) {
+    var ip = (ipad && ipad[w]) || "";
     return '<button class="ex" onclick="APP.say(' + JSON.stringify(w).replace(/"/g, "&quot;") +
-      ')">🔈 ' + H(w) + "</button>";
+      ')"><span class="t">' + H(w) + "</span>" +
+      (ip ? '<span class="ipa">' + H(ip) + "</span>" : "") + "</button>";
   }
 
   function tabQuiz(L) {
@@ -613,7 +659,15 @@
     }
     if (it.t === "ox" && it.sub) h.push('<div style="font-weight:700;margin-top:4px">聽到的字：' + H(it.sub) + "</div>");
     if (it.blank && ok) h.push('<div style="font-weight:700;margin-top:4px">完整單字：' + H(it.blank) + "</div>");
-    if (it.e) h.push('<div class="ex">' + H(it.e) + "</div>");
+    if (it.e) {
+      if (it.eipa) {
+        h.push('<div class="ex" style="cursor:pointer" onclick="APP.say(' +
+          JSON.stringify(it.e).replace(/"/g, "&quot;") + ')">' + H(it.e) + "</div>");
+        h.push('<span class="ipa" style="color:#2f6fb0;margin-top:1px">' + H(it.eipa) + "</span>");
+      } else {
+        h.push('<div class="ex">' + H(it.e) + "</div>");
+      }
+    }
     h.push("</div>");
     return h.join("");
   }

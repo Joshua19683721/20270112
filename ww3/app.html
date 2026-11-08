@@ -35,6 +35,8 @@ input{font-family:inherit;font-size:inherit}
 .hero .in{max-width:860px;margin:0 auto;position:relative;z-index:1}
 .hero h1{margin:0;font-size:22px;letter-spacing:.4px;font-weight:800}
 .hero .sub{margin-top:5px;font-size:13px;opacity:.86}
+.hero .ttsn{margin-top:8px;display:inline-block;font-size:11.5px;font-weight:700;
+  background:rgba(255,255,255,.2);padding:3px 10px;border-radius:20px;letter-spacing:.2px}
 .hero .stat{display:flex;gap:18px;margin-top:16px;font-size:12.5px}
 .hero .stat b{display:block;font-size:19px;font-weight:800;line-height:1.25}
 
@@ -90,8 +92,14 @@ input{font-family:inherit;font-size:inherit}
 .wcard .ph img{max-width:100%;max-height:100%;object-fit:contain;mix-blend-mode:multiply}
 .wcard .ph .ini{width:58px;height:58px;border-radius:50%;background:#eef1fa;color:#9aa6c8;
   display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800}
-.wcard .bd{padding:9px 11px 11px}
-.wcard .w{font-size:16.5px;font-weight:800;letter-spacing:.2px}
+.wcard .bd{padding:11px 13px 12px}
+.wcard.flat{justify-content:center}
+.wcard .wtop{display:flex;align-items:flex-start;gap:8px}
+.wcard .w{font-size:17px;font-weight:800;letter-spacing:.2px;cursor:pointer;flex:1;min-width:0;
+  word-break:break-word;line-height:1.35}
+.wcard .w:hover{color:var(--brand)}
+.wcard .spk.in{position:static;right:auto;top:auto;margin-left:auto;flex:0 0 26px;
+  width:26px;height:26px;border-radius:8px;background:#eef1fa;box-shadow:none;font-size:12px}
 .wcard .zh{font-size:12.5px;color:var(--ink2);margin-top:1px}
 .wcard .spk{
   position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:50%;
@@ -104,17 +112,31 @@ input{font-family:inherit;font-size:inherit}
 .scard{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:13px 15px;margin-bottom:10px}
 .scard .en{font-size:15.5px;font-weight:700;line-height:1.55;letter-spacing:.2px}
 .scard .zh{font-size:13px;color:var(--ink2);margin-top:4px}
+.scard .en{cursor:pointer}
+.scard .en:hover{color:var(--brand)}
 .scard .tag{
   display:inline-block;font-size:11px;font-weight:800;color:var(--brand);
   background:var(--brandsoft);padding:2px 8px;border-radius:6px;margin-bottom:6px;
 }
 .pcard{background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:10px}
 .pcard .pat{font-size:19px;font-weight:800;color:var(--brand);letter-spacing:.5px}
-.pcard .exs{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.pcard .exs{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;align-items:stretch}
+/* ---------- 音標 ---------- */
+.ipa{
+  display:block;font-size:12.5px;line-height:1.55;color:#2f6fb0;font-weight:600;
+  letter-spacing:.2px;margin-top:2px;word-break:break-word;
+  font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+.ipa::before{content:"/";opacity:.4;margin-right:1px}
+.ipa::after{content:"/";opacity:.4;margin-left:1px}
+.wcard .ipa{font-size:12px;margin-top:3px}
+.scard .ipa{font-size:12.5px;margin-top:3px}
+.pcard .exs{align-items:stretch}
 .pcard .ex{
   background:#f4f6fb;border-radius:9px;padding:5px 11px;font-size:14px;font-weight:600;
-  display:inline-flex;align-items:center;gap:6px;
+  display:inline-flex;flex-direction:column;align-items:center;gap:0;line-height:1.35;
 }
+.pcard .ex .ipa{font-size:10.5px;margin-top:1px;color:#5b7fb0;font-weight:600;letter-spacing:0}
 .pcard .ex:active{background:var(--brandsoft)}
 
 /* ---------- quiz ---------- */
@@ -215,6 +237,17 @@ input{font-family:inherit;font-size:inherit}
   color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 32px}
 .pgcard .hd .pb.playing{background:var(--ok)}
 .pgcard img{display:block;width:100%;height:auto;cursor:zoom-in;background:#fff}
+/* OCR 課文文字 */
+.pgcard .ocr{padding:11px 14px 13px;border-top:1px dashed var(--line);background:#fbfcff}
+.pgcard .ocr .oh{font-size:11.5px;font-weight:800;color:var(--ink3);letter-spacing:.4px;
+  margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.pgcard .ocr .oh .vd{font-size:10.5px;font-weight:700;color:#0a6b47;background:var(--oksoft);
+  padding:1px 7px;border-radius:20px;letter-spacing:0}
+.ocrline{padding:5px 8px;border-radius:8px;cursor:pointer;transition:.12s}
+.ocrline:hover{background:#eef3fd}
+.ocrline .t{font-size:14.5px;font-weight:700;line-height:1.5;letter-spacing:.2px}
+.ocrline .ipa{font-size:12px;margin-top:1px}
+.ocrline .zh{font-size:12px;color:var(--ink2);margin-top:1px}
 
 /* ---------- 素養卡 ---------- */
 .culcard{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:16px 17px;margin-bottom:12px;
@@ -223,11 +256,14 @@ input{font-family:inherit;font-size:inherit}
 .culcard .zh{font-size:13px;color:var(--ink2);margin-top:6px;font-weight:600}
 .culcard .bd{font-size:14px;line-height:1.85;margin-top:10px;color:var(--ink)}
 .culcard .kv{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
-.culcard .kv .r{display:flex;gap:9px;padding:5px 0;font-size:13.5px;align-items:baseline}
-.culcard .kv .r b{flex:0 0 auto;font-weight:800;color:#8a5a00;min-width:112px}
+.culcard .kv .r{display:flex;gap:9px;padding:5px 0;font-size:13.5px;align-items:baseline;flex-wrap:wrap}
+.culcard .kv .r b{flex:0 0 auto;font-weight:800;color:#8a5a00;min-width:112px;cursor:pointer}
+.culcard .kv .r b:hover{color:#b06f00}
+.culcard .kv .r .ipa{display:inline;font-size:11.5px;color:#2f6fb0;margin:0 0 0 2px;letter-spacing:0}
 .culcard .kv .r span{color:var(--ink2)}
 .culcard .ask{margin-top:12px;background:var(--warnsoft);border-radius:11px;padding:11px 13px;
-  font-size:13.5px;line-height:1.8;color:#7a5000}
+  font-size:13.5px;line-height:1.8;color:#7a5000;cursor:pointer}
+.culcard .ask .ipa{font-size:11.5px;color:#a0741f;margin-top:3px}
 
 /* ---------- 句型提醒 ---------- */
 .scard .note{margin-top:8px;font-size:12.8px;line-height:1.75;color:#8a5a00;

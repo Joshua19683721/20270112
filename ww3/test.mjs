@@ -23,8 +23,16 @@ for (const file of files) {
     beforeParse(w) {
       w.scrollTo = () => {};
       w.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
-      w.speechSynthesis = { speak() {}, cancel() {}, getVoices: () => [], onvoiceschanged: null };
-      w.SpeechSynthesisUtterance = class { constructor(t) { this.text = t; } };
+      w.__UTT__ = [];
+      w.speechSynthesis = {
+        speak(u) { w.__UTT__.push(u); },
+        cancel() {},
+        getVoices: () => [{ lang: "en-US", name: "Test en-US", localService: true, default: true }],
+        onvoiceschanged: null,
+      };
+      w.SpeechSynthesisUtterance = class {
+        constructor(t) { this.text = t; this.lang = ""; this.rate = 1; this.pitch = 1; }
+      };
       w.Audio = class {
         constructor(src) { this.src = src; }
         play() { return Promise.resolve(); }
@@ -122,6 +130,48 @@ for (const file of files) {
     }
     ok(allok, "group " + g.id + " 有小題找不到正確選項");
   }
+
+  // TTS：en-US、語速 0.65
+  w.APP.say("How's the weather?");
+  const u0 = (w.__UTT__ || [])[0];
+  ok(!!u0, "點擊發音沒有送出語音");
+  if (u0) {
+    ok(u0.lang === "en-US", "TTS 語言不是 en-US: " + u0.lang);
+    ok(Math.abs(u0.rate - 0.65) < 1e-6, "TTS 語速不是 0.65: " + u0.rate);
+    ok(u0.text === "How's the weather?", "TTS 唸的字不對: " + u0.text);
+  }
+
+  // 音標：每個單字、每個句型都要有
+  for (const L of V.lessons) {
+    const missW = L.words.filter((x) => !x.ipa).map((x) => x.w);
+    ok(missW.length === 0, `${L.label} 單字缺音標: ${missW.join(",")}`);
+    const missS = L.sents.filter((x) => !x.ipa).map((x) => x.en);
+    ok(missS.length === 0, `${L.label} 句型缺音標: ${missS.join(",")}`);
+    ok(L.words.every((x) => !!x.zh), `${L.label} 單字缺中文`);
+    ok(L.sents.every((x) => !!x.zh), `${L.label} 句型缺中文`);
+    w.APP.go({ v: "lesson", l: L.no, tab: "word" });
+    const nIpa = d.querySelectorAll(".wcard .ipa").length;
+    ok(nIpa === L.words.length, `${L.label} 單字卡音標 ${nIpa} != ${L.words.length}`);
+    w.APP.go({ v: "lesson", l: L.no, tab: "sent" });
+    const nS = d.querySelectorAll(".scard .ipa").length;
+    ok(nS === L.sents.length, `${L.label} 句型卡音標 ${nS} != ${L.sents.length}`);
+    const nPh = d.querySelectorAll(".pcard .ex").length;
+    const nPhIpa = d.querySelectorAll(".pcard .ex .ipa").length;
+    ok(nPhIpa === nPh, `${L.label} 拼讀例字音標 ${nPhIpa} != ${nPh}`);
+  }
+
+  // 頁面 OCR 文字
+  let ocrPages = 0, ocrLines = 0;
+  for (const L of V.lessons) {
+    for (const p of L.pages) if (p.ocr && p.ocr.length) { ocrPages++; ocrLines += p.ocr.length; }
+  }
+  if (ocrPages) {
+    const L0 = V.lessons.find((L) => L.pages.some((p) => p.ocr && p.ocr.length));
+    w.APP.go({ v: "lesson", l: L0.no, tab: "text" });
+    ok(d.querySelectorAll(".pgcard .ocr").length > 0, "課文頁沒有顯示 OCR 文字區塊");
+    ok(d.querySelectorAll(".ocrline .ipa").length > 0, "OCR 句子沒有音標");
+  }
+  console.log(`  OCR ${ocrPages} 頁 / ${ocrLines} 行`);
 
   // 資源檢查
   const imgs = Object.keys(w.__IM__ || {}).length;

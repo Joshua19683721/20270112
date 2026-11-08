@@ -46,6 +46,13 @@ for u in UNITS:
     if bl:
         items += copy.deepcopy(bl['items'])
     items += copy.deepcopy(NEW.get(lab, []))
+    # 拼讀聽力題：原題幹只有底線，補回字首字母（cape / ape -> c ＿＿）
+    for it in items:
+        bl = it.get('blank')
+        if bl and it.get('e') and it['e'].lower().endswith(bl.lower()):
+            pre = it['e'][:len(it['e']) - len(bl)]
+            if pre:
+                it['q'] = "聽單字，選出空格中的字母　" + pre + "＿＿＿＿"
     if lab in ('U1', 'U2', 'U3', 'U4'):
         for it in NEW['IC']:
             for key, target in ICMAP.items():
@@ -83,6 +90,47 @@ V = {
     "sub": "115年國小 Wonder World 3（上）",
     "lessons": lessons,
 }
+
+# ---- 音標 / 頁面 OCR ----
+from ipa import word_ipa, sent_ipa
+
+_H = os.path.dirname(os.path.abspath(__file__))
+OCR = {}
+_p = os.path.join(_H, 'ocr.json')
+if os.path.exists(_p):
+    OCR = json.load(io.open(_p, encoding='utf-8'))
+OCZ = {}
+_p = os.path.join(_H, 'ocr_zh.json')
+if os.path.exists(_p):
+    OCZ = json.load(io.open(_p, encoding='utf-8'))
+
+for L in lessons:
+    for w in L['words']:
+        w['ipa'] = word_ipa(w['w'])
+    for s in L['sents']:
+        s['ipa'] = sent_ipa(s['en'])
+    for it in L['items']:
+        if it.get('e'):
+            it['eipa'] = sent_ipa(it['e'])
+    for p in L['phonics']:
+        d = {}
+        for key in ('short', 'long'):
+            for x in p.get(key, []):
+                d[x] = word_ipa(x)
+        for pair in p.get('pairs', []):
+            for x in pair:
+                d[x] = word_ipa(x)
+        p['ipad'] = d
+    for c in L['culture']:
+        c['list'] = [[en, zh, note, sent_ipa(en)] for en, zh, note in c['list']]
+        ai = sent_ipa(c['ask'])
+        c['ask_ipa'] = ai if len(ai) >= 6 else ""
+    for pg in L['pages']:
+        o = OCR.get(pg['k'][3:])
+        if o and o.get('v'):
+            pg['ocr'] = [{"t": t, "ipa": sent_ipa(t), "zh": OCZ.get(t, "")} for t in o['v']]
+            pg['ocrm'] = o.get('m', 'ab')
+
 json.dump(V, io.open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 # ---- 統計 ----
@@ -118,3 +166,32 @@ for L in lessons:
                 if not (0 <= s['a'] < len(s['o'])):
                     print('!! group 答案越界', it['id'])
 print('id 總數', len(ids))
+
+# ---- 音標 / OCR 檢查 ----
+nw = ns = np_ = 0
+bad = []
+for L in lessons:
+    for w in L['words']:
+        nw += 1
+        if not w['ipa']:
+            bad.append('單字無音標 ' + w['w'])
+    for s in L['sents']:
+        ns += 1
+        if not s['ipa']:
+            bad.append('句型無音標 ' + s['en'])
+    for p in L['phonics']:
+        for k in ('short', 'long'):
+            for x in p.get(k, []):
+                np_ += 1
+                if not p['ipad'].get(x):
+                    bad.append('拼讀無音標 ' + x)
+    for pg in L['pages']:
+        for o in pg.get('ocr', []):
+            if not o['ipa']:
+                bad.append('OCR 無音標 ' + o['t'])
+for b in bad[:20]:
+    print('!!', b)
+print('音標：單字 %d／句型 %d／拼讀例字 %d，缺 %d 筆' % (nw, ns, np_, len(bad)))
+nl = sum(len(pg.get('ocr', [])) for L in lessons for pg in L['pages'])
+nz = sum(1 for L in lessons for pg in L['pages'] for o in pg.get('ocr', []) if o['zh'])
+print('頁面 OCR：%d 行，已翻譯 %d 行' % (nl, nz))

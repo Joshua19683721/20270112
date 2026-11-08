@@ -1,0 +1,683 @@
+{
+ "p45": {
+  "v": [
+   "Is it a cat?",
+   "No, it's not. It's a dog.",
+   "She's my mother.",
+   "Can you dance?",
+   "Is she a doctor?",
+   "Yes, she is."
+  ],
+  "single": 21,
+  "a": 17,
+  "b": 27,
+  "m": "ab"
+ },
+ "p6": {
+  "v": [],
+  "single": 12,
+  "a": 12,
+  "b": 12,
+  "m": "ab"
+ },
+ "p89": {
+  "v": [
+   "Be quiet.",
+   "Please turn to page 12.",
+   "Raise your hand.",
+   "Put down your hand.",
+   "Go back to your seat.",
+   "Repeat after me.",
+   "Show me your homework.",
+   "Loudly, please."
+  ],
+  "single": 1,
+  "a": 9,
+  "b": 9,
+  "m": "ab"
+ },
+ "p1011": {
+  "v": [
+   "Look, Read, and Match",
+   "He's ten.",
+   "① He's two.",
+   "He can sing.",
+   "Who's he?",
+   "② She's two years old.",
+   "She can't fly.",
+   "Who's she?",
+   "③ She's a girl.",
+   "She's nine years old.",
+   "She can fly a kite.",
+   "④ He's a boy.",
+   "He's a student."
+  ],
+  "single": 2,
+  "a": 15,
+  "b": 14,
+  "m": "ab"
+ },
+ "p1213": {
+  "v": [
+   "Get Ready",
+   "A Read and Say",
+   "C Let's Chant",
+   "I take a cap.",
+   "I take a cap and a cake.",
+   "I take a cap and a cake for Dave.",
+   "D Listen and Circle"
+  ],
+  "single": 14,
+  "a": 8,
+  "b": 21,
+  "m": "b"
+ },
+ "p1415": {
+  "v": [
+   "Listen and Say",
+   "Kevin, wake up!",
+   "wake up"
+  ],
+  "single": 14,
+  "a": 0,
+  "b": 17,
+  "m": "b"
+ },
+ "p1617": {
+  "v": [
+   "Let's go to the park.",
+   "How's the weather?",
+   "It's sunny.",
+   "No, it's rainy.",
+   "How come?",
+   "Look! It's Boka!",
+   "Let's go, Kevin."
+  ],
+  "single": 2,
+  "a": 7,
+  "b": 9,
+  "m": "ab"
+ },
+ "p1819": {
+  "v": [
+   "Line up, please.",
+   "Look! It's cloudy.",
+   "What's going on?",
+   "It's windy.",
+   "Oh, no! My cap!",
+   "How's the weather in the story?"
+  ],
+  "single": 1,
+  "a": 7,
+  "b": 7,
+  "m": "ab"
+ },
+ "p2021": {
+  "v": [
+   "A Listen and Say",
+   "B Listen and Number",
+   "It's cloudy in Taichung."
+  ],
+  "single": 13,
+  "a": 16,
+  "b": 15,
+  "m": "ab"
+ },
+ "p2223": {
+  "v": [
+   "Listen, Read, and Say",
+   "How's the weather?",
+   "It's sunny.",
+   "How's the weather in Taipei?",
+   "It's rainy.",
+   "What happens if it rains too much or too little?",
+   "Rain! Rain!"
+  ],
+  "single": 12,
+  "a": 0,
+  "b": 19,
+  "m": "b"
+ },
+ "p2425": {
+  "v": [
+   "I can't wait.",
+   "Line up, please.",
+   "Let's go.",
+   "How's the Weather?",
+   "It's sunny.",
+   "It's sunny today."
+  ],
+  "single": 6,
+  "a": 11,
+  "b": 12,
+  "m": "ab"
+ },
+ "p2627": {
+  "v": [
+   "Read and Say",
+   "Let's Chant",
+   "I see Ted.",
+   "I see Ted and Eve.",
+   "I see Ted and Eve at the sea.",
+   "Listen and Circle"
+  ],
+  "single": 17,
+  "a": 15,
+  "b": 23,
+  "m": "ab"
+ },
+ "p2829": {
+  "v": [
+   "Look, Read, and Write",
+   "It's sunny."
+  ],
+  "single": 8,
+  "a": 10,
+  "b": 9,
+  "m": "ab"
+ },
+ "p3031": {
+  "v": [
+   "We're back.",
+   "Great!",
+   "Look! It's a bird.",
+   "That's a frog.",
+   "Listen!",
+   "It's four fifteen. We must go home.",
+   "Oh, it's four o'clock. Time to go home."
+  ],
+  "single": 2,
+  "a": 7,
+  "b": 9,
+  "m": "ab"
+ },
+ "p3233": {
+  "v": [
+   "What's that?",
+   "It's a dog.",
+   "What time is it?",
+   "Oh, no! It's four fifty!",
+   "Bye!",
+   "Sorry, I'm late, Mom.",
+   "Look and Match:"
+  ],
+  "single": 1,
+  "a": 8,
+  "b": 8,
+  "m": "ab"
+ },
+ "p3435": {
+  "v": [
+   "It's nine o'clock.",
+   "Watch Your Time!",
+   "Which routine is better?"
+  ],
+  "single": 10,
+  "a": 13,
+  "b": 13,
+  "m": "ab"
+ },
+ "p3637": {
+  "v": [
+   "A Listen, Read, and Say",
+   "What time is it?",
+   "It's twelve o'clock.",
+   "It's twelve thirty.",
+   "What are you doing now? What do they like eating?",
+   "It's ten o'clock. It's nine thirty.",
+   "What time is it in Tokyo?"
+  ],
+  "single": 7,
+  "a": 5,
+  "b": 14,
+  "m": "b"
+ },
+ "p3839": {
+  "v": [
+   "What Time Is It?",
+   "Hickory Dickory Dock.",
+   "The cuckoo in the clock.",
+   "It is four o'clock.",
+   "Listen!",
+   "Great!"
+  ],
+  "single": 4,
+  "a": 10,
+  "b": 7,
+  "m": "ab"
+ },
+ "p4041": {
+  "v": [
+   "Read and Say",
+   "Let's Chant 2",
+   "Tim can ride.",
+   "Tim can ride a bike.",
+   "Tim can ride a bike to the pine."
+  ],
+  "single": 8,
+  "a": 7,
+  "b": 13,
+  "m": "ab"
+ },
+ "p4243": {
+  "v": [
+   "Listen and Number",
+   "Look and Write \"teen\" or \"ty\""
+  ],
+  "single": 5,
+  "a": 6,
+  "b": 7,
+  "m": "ab"
+ },
+ "p4445": {
+  "v": [
+   "B Play and Say.",
+   "Go one step.",
+   "Go two steps.",
+   "How's the weather? It's ________.",
+   "What time is it? It's ________.",
+   "It's _______ o'clock.",
+   "Miss a turn.",
+   "Go back 1 step."
+  ],
+  "single": 7,
+  "a": 15,
+  "b": 15,
+  "m": "ab"
+ },
+ "p4647": {
+  "v": [],
+  "single": 23,
+  "a": 23,
+  "b": 2,
+  "m": "a"
+ },
+ "p4849": {
+  "v": [
+   "Is this your pencil?",
+   "No, it's not.",
+   "Is this your eraser?",
+   "Let's take them to the lost and found.",
+   "But they're so cool. I like them."
+  ],
+  "single": 0,
+  "a": 5,
+  "b": 5,
+  "m": "ab"
+ },
+ "p5051": {
+  "v": [
+   "It's not your pencil.",
+   "It's not your eraser.",
+   "What happened?",
+   "Phew! It's just a dream.",
+   "It's my eraser."
+  ],
+  "single": 4,
+  "a": 5,
+  "b": 9,
+  "m": "ab"
+ },
+ "p5253": {
+  "v": [
+   "A Listen and Say",
+   "B Listen and Number",
+   "Do the Right Thing",
+   "Take it home.",
+   "Wow! A storybook.",
+   "Take it to the lost and found.",
+   "What would you do?"
+  ],
+  "single": 4,
+  "a": 0,
+  "b": 11,
+  "m": "b"
+ },
+ "p5455": {
+  "v": [
+   "Is this your pencil?",
+   "Yes, it is.",
+   "No, it's not.",
+   "Thank you.",
+   "Is this your ax?",
+   "Ahh!"
+  ],
+  "single": 6,
+  "a": 6,
+  "b": 12,
+  "m": "ab"
+ },
+ "p5657": {
+  "v": [
+   "What happened?",
+   "Let me help you.",
+   "Nice!",
+   "Is this your marker?",
+   "No, it's not.",
+   "Yes, it is.",
+   "Thank you very much."
+  ],
+  "single": 5,
+  "a": 9,
+  "b": 12,
+  "m": "ab"
+ },
+ "p5859": {
+  "v": [
+   "A Read and Say",
+   "Let's Chant",
+   "Hope over the cone.",
+   "Hope over the cone and the hole.",
+   "Hope over the cone and the hole with a bone."
+  ],
+  "single": 8,
+  "a": 0,
+  "b": 13,
+  "m": "b"
+ },
+ "p6061": {
+  "v": [
+   "my pen your pen",
+   "Is this your pen?",
+   "Yes, it's my pen.",
+   "My pen! My pen!",
+   "No, it's not your pen. It's my pen.",
+   "Look, Read, and Circle",
+   "This is (my / your) dog.",
+   "It's under the chair.",
+   "Is that (my / your) dog?",
+   "Yes, it's my dog.",
+   "Where's the eraser?"
+  ],
+  "single": 4,
+  "a": 14,
+  "b": 15,
+  "m": "ab"
+ },
+ "p6263": {
+  "v": [
+   "Earthquake! Please take cover.",
+   "Jello, get under the desk.",
+   "On the desk?",
+   "No! Not on the desk. Under the desk.",
+   "OK.",
+   "Time to get out.",
+   "Where's my schoolbag?",
+   "It's on the chair."
+  ],
+  "single": 0,
+  "a": 8,
+  "b": 8,
+  "m": "ab"
+ },
+ "p6465": {
+  "v": [
+   "Where's Boka?",
+   "I'm here.",
+   "Give me a hand, please.",
+   "Watch out!"
+  ],
+  "single": 6,
+  "a": 5,
+  "b": 10,
+  "m": "ab"
+ },
+ "p6667": {
+  "v": [
+   "A Listen and Say 02:22",
+   "B Listen and Number 02:23",
+   "It's under the chair.",
+   "drop 2 cover 3 hold on!"
+  ],
+  "single": 5,
+  "a": 9,
+  "b": 9,
+  "m": "ab"
+ },
+ "p6869": {
+  "v": [
+   "A Listen, Read, and Say 26 Wordwall Quizizz Go Bag More to Learn Unit",
+   "Where's the eraser? It's under the chair.",
+   "What's in the go bag?"
+  ],
+  "single": 11,
+  "a": 11,
+  "b": 14,
+  "m": "ab"
+ },
+ "p7071": {
+  "v": [
+   "Watch out!",
+   "I'm sorry.",
+   "Give me a hand, please.",
+   "Where's the cat?",
+   "It's in the box, in the box, in the box.",
+   "It's in the box, my dear mommy.",
+   "Where's the box?",
+   "It's on the desk, on the desk, on the desk.",
+   "It's on the desk, my dear mommy."
+  ],
+  "single": 5,
+  "a": 11,
+  "b": 14,
+  "m": "ab"
+ },
+ "p7273": {
+  "v": [
+   "A Read and Say",
+   "A duck sings a tune.",
+   "A duck sings a tune on the cube.",
+   "A duck sings a tune on the cube for the duke."
+  ],
+  "single": 13,
+  "a": 10,
+  "b": 17,
+  "m": "ab"
+ },
+ "p7475": {
+  "v": [
+   "Listen and Mark \"O\" or \"X\""
+  ],
+  "single": 9,
+  "a": 10,
+  "b": 8,
+  "m": "ab"
+ },
+ "p7677": {
+  "v": [
+   "The red toy car is under the desk. The blue box is on the desk. Where am I?",
+   "You're in Room ______.",
+   "The red schoolbag is on the floor. The blue box is on the floor, too. Where am I?",
+   "The red toy car is on the chair. The blue pen is on the desk. Where am I?",
+   "The pink schoolbag is on the chair. The blue pen is on the desk. Where am I?"
+  ],
+  "single": 5,
+  "a": 9,
+  "b": 10,
+  "m": "ab"
+ },
+ "p7879": {
+  "v": [
+   "Play and Say",
+   "Say and Place a Chip",
+   "A Listen and Say",
+   "B Listen and Number",
+   "not"
+  ],
+  "single": 33,
+  "a": 38,
+  "b": 7,
+  "m": "a"
+ },
+ "p8081": {
+  "v": [
+   "Let's go trick-or-treating!",
+   "Hooray!",
+   "Red light! Stop!",
+   "Is that your grandpa's house?",
+   "Yes!",
+   "Trick or treat!"
+  ],
+  "single": 0,
+  "a": 0,
+  "b": 6,
+  "m": "b"
+ },
+ "p8283": {
+  "v": [
+   "Ahh!",
+   "Happy Halloween!",
+   "You're a vampire.",
+   "She's a witch.",
+   "Here's some candy.",
+   "Nice and sweet."
+  ],
+  "single": 2,
+  "a": 0,
+  "b": 8,
+  "m": "b"
+ },
+ "p8485": {
+  "v": [
+   "Let's Write",
+   "A Look and Guess 9:24 9:25 9:26 9:27 9:28 9:29 9:30 9:31 9:32 9:33 9:34 9:35 9:36 9:37 9:38 9:39 9:40 9:41 9:42 9:43 9:44 9:45 9:46 9:47 9:48 9:49 9:50 9:51 9:52 9:53 9:54 9:55 9:56 9:57 9:58 9:59 9:60 9:61 9:62 9:63 9:64 9:65 9:66 9:67 9:68 9:69 9:70 9:71 9:72 9:73 9:74 9:75 9:76 9:77 9:78 9:79 9:80 9:81 9:82 9:83 9:84 9:85",
+   "A Help! There's a fire!",
+   "It's hot and windy now!",
+   "Please hurry!",
+   "I'm in Town ______.",
+   "B Help! There's a blackout!",
+   "It's dark now!",
+   "C Help! There's ______.",
+   "It's _______ now!",
+   "Please hurry! I'm in Town ______."
+  ],
+  "single": 3,
+  "a": 14,
+  "b": 1,
+  "m": "a"
+ },
+ "p8687": {
+  "v": [],
+  "single": 11,
+  "a": 11,
+  "b": 8,
+  "m": "ab"
+ },
+ "p8889": {
+  "v": [],
+  "single": 13,
+  "a": 10,
+  "b": 13,
+  "m": "ab"
+ },
+ "p9293": {
+  "v": [
+   "Kevin, wake up!",
+   "Let's go to the park.",
+   "How's the weather?",
+   "It's sunny.",
+   "No, it's rainy.",
+   "How come?",
+   "Look! It's Boka!",
+   "Let's go, Kevin.",
+   "Line up, please.",
+   "Look! It's cloudy.",
+   "It's windy.",
+   "Oh, no! My cap!",
+   "What's going on?"
+  ],
+  "single": 11,
+  "a": 24,
+  "b": 19,
+  "m": "ab"
+ },
+ "p9495": {
+  "v": [
+   "Ahh!",
+   "We're back.",
+   "Great!",
+   "Listen!",
+   "It's the school bell.",
+   "Oh, it's four o'clock. Time to go home.",
+   "Look!",
+   "It's a bird.",
+   "That's a frog.",
+   "It four fifteen. We must go home.",
+   "What is that?",
+   "It's a dog.",
+   "What time is it?",
+   "Oh, no! It's four fifty!",
+   "Bye!",
+   "Sorry, I'm late, Mom.",
+   "It's twelve o'clock.",
+   "It's twelve thirty."
+  ],
+  "single": 13,
+  "a": 31,
+  "b": 30,
+  "m": "ab"
+ },
+ "p9697": {
+  "v": [
+   "Nice!",
+   "Is this your pencil?",
+   "No, it's not.",
+   "Is this your eraser?",
+   "Let's take them to the lost and found.",
+   "But they're so cool. I like them,",
+   "It's not your pencil.",
+   "It's not your eraser.",
+   "What happened?",
+   "Phew! It's just a dream.",
+   "Yes, it is."
+  ],
+  "single": 19,
+  "a": 21,
+  "b": 30,
+  "m": "ab"
+ },
+ "p9899": {
+  "v": [
+   "Where's the eraser?",
+   "It's under the chair.",
+   "Earthquake! Please take cover.",
+   "Jello, get under the desk.",
+   "On the desk?",
+   "No! Not on the desk. Under the desk.",
+   "OK.",
+   "Time to get out.",
+   "Where's my schoolbag?",
+   "It's on the chair.",
+   "Where's Baka?",
+   "I'm here. Give me a hand, please.",
+   "Watch out!",
+   "Where's the eraser? Where's the eraser? It's under the chair. It's under the chair.",
+   "Watch out! Give me a hand, please.",
+   "Look and Say",
+   "Read and Say",
+   "Sound It Out"
+  ],
+  "single": 21,
+  "a": 27,
+  "b": 39,
+  "m": "ab"
+ },
+ "p100101": {
+  "v": [
+   "Let's go trick-or-treating!",
+   "Hooray!",
+   "Red light! Stop!",
+   "Is that your grandpa's house?",
+   "Yes!",
+   "Trick or treat!",
+   "Ahh!",
+   "Happy Halloween!",
+   "Look and Say",
+   "Find the word on page 104."
+  ],
+  "single": 15,
+  "a": 0,
+  "b": 25,
+  "m": "b"
+ }
+}
