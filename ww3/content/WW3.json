@@ -10821,7 +10821,7 @@
       "fifteen",
       "sixty"
      ],
-     "a": 2,
+     "a": 0,
      "eipa": "ˈfɪfti"
     },
     {
@@ -10845,7 +10845,7 @@
       "four o’clock",
       "seven o’clock"
      ],
-     "a": 0,
+     "a": 2,
      "eipa": "ˈsɛvən oʊ’klɑk"
     },
     {
@@ -10869,7 +10869,7 @@
       "four fifty-five",
       "eight twenty-five"
      ],
-     "a": 0,
+     "a": 1,
      "eipa": "fɔr ˈfɪfti-faɪv"
     },
     {
@@ -10893,7 +10893,7 @@
       "windy",
       "hot"
      ],
-     "a": 2,
+     "a": 1,
      "eipa": "ˈwɪndi"
     },
     {
@@ -10917,7 +10917,7 @@
       "rainy",
       "cold"
      ],
-     "a": 1,
+     "a": 0,
      "eipa": "ˈklaʊdi"
     },
     {
@@ -20047,7 +20047,7 @@
       "ruler",
       "marker"
      ],
-     "a": 1,
+     "a": 0,
      "eipa": "ˈʌndɚ"
     },
     {
@@ -20071,7 +20071,7 @@
       "chair",
       "book"
      ],
-     "a": 0,
+     "a": 2,
      "eipa": "bʊk"
     },
     {
@@ -20095,7 +20095,7 @@
       "pencil",
       "eraser"
      ],
-     "a": 2,
+     "a": 1,
      "eipa": "ˈpɛnsəl"
     },
     {
@@ -20119,7 +20119,7 @@
       "on",
       "box"
      ],
-     "a": 1,
+     "a": 0,
      "eipa": "ɪn"
     },
     {
@@ -20143,7 +20143,7 @@
       "chair",
       "desk"
      ],
-     "a": 1,
+     "a": 2,
      "eipa": "dɛsk"
     },
     {
