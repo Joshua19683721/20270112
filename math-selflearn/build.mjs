@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const here = 'C:/Users/joshu/WorkBuddy AI/tempfolder/math-selflearn';
+const here = path.dirname(fileURLToPath(import.meta.url));
 const read = p => fs.readFileSync(path.join(here, p), 'utf8');
 
 const { META, UNITS } = await import('./content/index.mjs');
@@ -22,11 +23,13 @@ let html = shell
   .replace('/*__DATA__*/', () => data)
   .replace('/*__APP__*/', () => app);
 
-const out = path.join(here, '數學4上自主學習_期中後.html');
+const out = path.join(here, '數學4上自主學習_全冊.html');
 fs.writeFileSync(out, html, 'utf8');
 
 const kb = (Buffer.byteLength(html, 'utf8') / 1024).toFixed(0);
 console.log('WROTE ' + out);
 console.log('size ' + kb + ' KB, units ' + UNITS.length +
   ', items ' + UNITS.reduce((a, u) => a + u.items.length, 0) +
-  ', cards ' + UNITS.reduce((a, u) => a + u.cards.length, 0));
+  ', cards ' + UNITS.reduce((a, u) => a + u.cards.length, 0) +
+  ', gens ' + UNITS.reduce((a, u) => a + u.gens.length, 0) +
+  ', tools ' + UNITS.reduce((a, u) => a + u.tools.length, 0));

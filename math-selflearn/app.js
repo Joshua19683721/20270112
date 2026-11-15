@@ -133,11 +133,11 @@
     var html = '' +
       '<section class="hero">' +
       '<div class="hero-l">' +
-      '<div class="kicker">期中考後 · 第 6～10 單元</div>' +
+      '<div class="kicker">康軒版 · 全冊 第 1～10 單元</div>' +
       '<h2>把「算錯」變成「知道為什麼錯」</h2>' +
-      '<p>五個單元、' + totalItems + ' 道校訂題目，加上無限出題與五種互動教具。每題都有分步解析，答錯會告訴你錯在哪一步。</p>' +
+      '<p>' + UNITS.length + ' 個單元、' + totalItems + ' 道校訂題目，加上無限出題與互動教具。每題都有分步解析，答錯會告訴你錯在哪一步。</p>' +
       '<div class="hero-btns">' +
-      '<button class="btn primary" data-go="u6">從第 6 單元開始</button>' +
+      '<button class="btn primary" data-go="u1">從第 1 單元開始</button>' +
       '<button class="btn" data-go="wrong">看錯題本（' + wrongN + '）</button>' +
       '</div></div>' +
       '<div class="hero-r">' +
@@ -149,7 +149,7 @@
       '</div></div>' +
       '</section>';
 
-    html += '<h2 class="sec">五個單元</h2><p class="sub">點進去看概念圖、知識卡、例題，再練題。</p><div class="grid">';
+    html += '<h2 class="sec">' + UNITS.length + ' 個單元</h2><p class="sub">點進去看概念圖、知識卡、例題，再練題。</p><div class="grid">';
     UNITS.forEach(function (u) {
       var st = unitStats(u);
       html += '' +
@@ -603,7 +603,175 @@
       if (t.kind === 'order') toolOrder(box);
       if (t.kind === 'fraction') toolFraction(box);
       if (t.kind === 'chart') toolChart(box);
+      if (t.kind === 'bigplace') toolBigPlace(box);
+      if (t.kind === 'mult') toolMult(box);
+      if (t.kind === 'angle') toolAngle(box);
+      if (t.kind === 'div') toolDiv(box);
+      if (t.kind === 'km') toolKm(box);
     });
+  }
+
+  function toolBigPlace(box) {
+    box.innerHTML = '<div class="trow"><label>輸入一億以內的數 <input id="bpi" class="tin wide" value="23264640" autocomplete="off"></label>' +
+      '<button class="btn sm primary" id="bpb">看位值</button></div><div id="bpo"></div>' +
+      '<div class="tchips">' + ['23264640', '1055381', '30050000', '40980'].map(function (x) { return '<button class="chipb" data-big="' + x + '">' + x + '</button>'; }).join('') + '</div>';
+    function upd() {
+      var raw = halfWidth($('#bpi', box).value).replace(/[^\d]/g, '').slice(0, 9).replace(/^0+(?=\d)/, '');
+      var n = raw ? parseInt(raw, 10) : 0;
+      var names = ['億', '千萬', '百萬', '十萬', '萬', '千', '百', '十', '個'];
+      var cells = String(n).padStart(9, ' ').split('');
+      var html = '<table class="pvtable"><tr>' + names.map(function (nm) { return '<th>' + nm + '</th>'; }).join('') + '</tr><tr>' +
+        cells.map(function (c) { return '<td>' + (c === ' ' ? '' : c) + '</td>'; }).join('') + '</tr></table>';
+      var parts = [];
+      cells.forEach(function (c, i) {
+        if (c === ' ' || c === '0') return;
+        parts.push(c + ' 個' + names[i]);
+      });
+      html += '<div class="tres"><span>' + esc(raw || '0') + ' 讀作 <b>' + esc(readBig(n)) + '</b></span></div>';
+      html += '<div class="tres"><span>' + (parts.length ? esc(parts.join('、')) + ' 合起來' : '0 還是 0') + '</span></div>';
+      $('#bpo', box).innerHTML = html;
+    }
+    $('#bpi', box).addEventListener('input', upd);
+    $('#bpb', box).addEventListener('click', upd);
+    $$('.chipb', box).forEach(function (b) {
+      b.addEventListener('click', function () { $('#bpi', box).value = b.getAttribute('data-big'); upd(); });
+    });
+    upd();
+  }
+
+  function toolMult(box) {
+    box.innerHTML = '<div class="trow"><label>被乘數 <input id="mxa" class="tin" value="2345" autocomplete="off"></label>' +
+      '<label>乘數 <input id="mxb" class="tin" value="6" autocomplete="off"></label>' +
+      '<button class="btn sm primary" id="mxgo">算算看</button></div><div id="mxo"></div>' +
+      '<div class="tchips">' + ['2345×6', '3208×7', '47×38', '1234×56'].map(function (x) { return '<button class="chipb" data-mx="' + x + '">' + x + '</button>'; }).join('') + '</div>';
+    function upd() {
+      var a = parseInt(halfWidth($('#mxa', box).value).replace(/[^\d]/g, ''), 10);
+      var b = parseInt(halfWidth($('#mxb', box).value).replace(/[^\d]/g, ''), 10);
+      if (!(a > 0) || !(b > 0)) { $('#mxo', box).innerHTML = '<div class="warn">請輸入兩個正整數</div>'; return; }
+      var p = a * b, u = b % 10, t = Math.floor(b / 10), rows = [];
+      if (t > 0) {
+        rows.push('第一層：' + a + ' × ' + u + ' ＝ ' + (a * u));
+        rows.push('第二層：' + a + ' × ' + t + '0 ＝ ' + (a * t * 10) + '（往左移一位）');
+        rows.push('兩層相加：' + (a * u) + ' ＋ ' + (a * t * 10) + ' ＝ ' + p);
+      } else {
+        rows.push('一位數乘法：從個位開始，一位一位乘');
+        rows.push(a + ' × ' + b + ' ＝ ' + p);
+      }
+      $('#mxo', box).innerHTML = '<div class="steps">' + rows.map(function (s, i) {
+        return '<div class="solrow"><i>' + (i + 1) + '</i><span>' + esc(s) + '</span></div>';
+      }).join('') + '</div><div class="tres"><b>' + a + ' × ' + b + ' ＝ ' + p + '</b></div>';
+    }
+    $('#mxgo', box).addEventListener('click', upd);
+    $$('.chipb', box).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var parts = b.getAttribute('data-mx').split('×');
+        $('#mxa', box).value = parts[0];
+        $('#mxb', box).value = parts[1];
+        upd();
+      });
+    });
+    upd();
+  }
+
+  function toolAngle(box) {
+    box.innerHTML = '<div class="trow"><label>角度 <input type="range" id="ang" min="5" max="360" step="5" value="60"><b id="angv">60°</b></label></div>' +
+      '<div class="tcanvas" id="angsvg"></div><div class="tinfo" id="anginfo"></div>';
+    var r = $('#ang', box);
+    function upd() {
+      var d = +r.value;
+      $('#angv', box).textContent = d + '°';
+      var W = 460, H = 280, cx = 120, cy = 220, Rr = 130;
+      var ex = cx + Rr * Math.cos(d * Math.PI / 180);
+      var ey = cy - Rr * Math.sin(d * Math.PI / 180);
+      var large = d > 180 ? 1 : 0;
+      var arc = d >= 360
+        ? '<circle cx="' + cx + '" cy="' + cy + '" r="' + Rr + '" fill="none" stroke="#2b5fa8" stroke-width="2"/>'
+        : '<path d="M ' + (cx + Rr) + ' ' + cy + ' A ' + Rr + ' ' + Rr + ' 0 ' + large + ' 0 ' + ex + ' ' + ey + '" fill="rgba(43,95,168,.12)" stroke="#2b5fa8" stroke-width="2"/>';
+      var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '">' + arc +
+        '<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + Rr) + '" y2="' + cy + '" stroke="#16365f" stroke-width="2.5"/>' +
+        '<line x1="' + cx + '" y1="' + cy + '" x2="' + ex + '" y2="' + ey + '" stroke="#16365f" stroke-width="2.5"/>' +
+        '<circle cx="' + cx + '" cy="' + cy + '" r="4" fill="#16365f"/>' +
+        '<text x="' + (cx + 40) + '" y="' + (cy - 14) + '" font-size="15" fill="#0f8b7e">' + d + '°</text></svg>';
+      $('#angsvg', box).innerHTML = svg;
+      var nm = d < 90 ? '銳角' : (d === 90 ? '直角' : (d < 180 ? '鈍角' : (d === 180 ? '平角' : (d === 360 ? '周角' : '反角（優角）'))));
+      $('#anginfo', box).innerHTML = '<div class="tres"><span>' + d + '° 是 <b>' + nm + '</b></span><span>鐘面上約 ' + (d / 30).toFixed(1) + ' 大格</span><span>等於 ' + (d / 90).toFixed(2) + ' 個直角</span></div>';
+    }
+    r.addEventListener('input', upd); upd();
+  }
+
+  function toolDiv(box) {
+    box.innerHTML = '<div class="trow"><label>被除數 <input id="dva" class="tin" value="253" autocomplete="off"></label>' +
+      '<label>除數 <input id="dvb" class="tin" value="36" autocomplete="off"></label>' +
+      '<button class="btn sm primary" id="dvgo">算算看</button></div><div id="dvo"></div>' +
+      '<div class="tchips">' + ['8568÷4', '96÷24', '253÷36', '4325÷25'].map(function (x) { return '<button class="chipb" data-dv="' + x + '">' + x + '</button>'; }).join('') + '</div>';
+    function upd() {
+      var a = parseInt(halfWidth($('#dva', box).value).replace(/[^\d]/g, ''), 10);
+      var b = parseInt(halfWidth($('#dvb', box).value).replace(/[^\d]/g, ''), 10);
+      if (!(a >= 0) || !(b > 0)) { $('#dvo', box).innerHTML = '<div class="warn">被除數要是 0 以上的整數，除數要大於 0</div>'; return; }
+      var q = Math.floor(a / b), r = a % b;
+      var est = Math.max(10, Math.round(b / 10) * 10);
+      var rows = [
+        '估商：把 ' + b + ' 看成 ' + est + '，先估 ' + q,
+        '乘：' + b + ' × ' + q + ' ＝ ' + (b * q),
+        '減：' + a + ' － ' + (b * q) + ' ＝ ' + r,
+        '檢查：餘數 ' + r + (r < b ? ' ＜ ' : ' 不小於 ') + '除數 ' + b,
+        '驗算：' + b + ' × ' + q + ' ＋ ' + r + ' ＝ ' + (b * q + r)
+      ];
+      $('#dvo', box).innerHTML = '<div class="steps">' + rows.map(function (s, i) {
+        return '<div class="solrow"><i>' + (i + 1) + '</i><span>' + esc(s) + '</span></div>';
+      }).join('') + '</div><div class="tres"><b>' + a + ' ÷ ' + b + ' ＝ ' + q + ' 餘 ' + r + '</b></div>';
+    }
+    $('#dvgo', box).addEventListener('click', upd);
+    $$('.chipb', box).forEach(function (c) {
+      c.addEventListener('click', function () {
+        var parts = c.getAttribute('data-dv').split('÷');
+        $('#dva', box).value = parts[0];
+        $('#dvb', box).value = parts[1];
+        upd();
+      });
+    });
+    upd();
+  }
+
+  function toolKm(box) {
+    box.innerHTML = '<div class="trow"><label>公里 <input id="kmk" class="tin" value="2" autocomplete="off"></label>' +
+      '<label>公尺 <input id="kmm" class="tin" value="500" autocomplete="off"></label>' +
+      '<button class="btn sm primary" id="kmgo">換算</button></div><div id="kmo"></div>' +
+      '<div class="tchips">' + ['3 公里', '2 公里 500 公尺', '4500 公尺', '1 公里 80 公尺'].map(function (x) { return '<button class="chipb" data-km="' + x + '">' + x + '</button>'; }).join('') + '</div>';
+    function upd() {
+      var k = parseInt(halfWidth($('#kmk', box).value).replace(/[^\d]/g, '') || '0', 10);
+      var m = parseInt(halfWidth($('#kmm', box).value).replace(/[^\d]/g, '') || '0', 10);
+      var total = k * 1000 + m;
+      var kk = Math.floor(total / 1000), mm = total % 1000;
+      var rows = [
+        k + ' 公里＝' + (k * 1000) + ' 公尺',
+        '合起來：' + (k * 1000) + ' ＋ ' + m + ' ＝ ' + total + ' 公尺',
+        '換成公分：' + total + ' × 100 ＝ ' + (total * 100) + ' 公分',
+        '換回複名數：' + total + ' 公尺＝' + kk + ' 公里 ' + mm + ' 公尺'
+      ];
+      $('#kmo', box).innerHTML = '<div class="steps">' + rows.map(function (s, i) {
+        return '<div class="solrow"><i>' + (i + 1) + '</i><span>' + esc(s) + '</span></div>';
+      }).join('') + '</div><div class="tres"><b>' + k + ' 公里 ' + m + ' 公尺 ＝ ' + total + ' 公尺</b><span>' +
+        (total > 1000 ? '比 1 公里長 ' + (total - 1000) + ' 公尺' : (total === 1000 ? '剛好是 1 公里' : '比 1 公里短 ' + (1000 - total) + ' 公尺')) +
+        '</span><span>操場 200 公尺約 ' + (total / 200).toFixed(1) + ' 圈</span></div>';
+    }
+    $('#kmgo', box).addEventListener('click', upd);
+    $$('.chipb', box).forEach(function (c) {
+      c.addEventListener('click', function () {
+        var t = c.getAttribute('data-km');
+        var mix = t.match(/(\d+)\s*公里\s*(\d+)?/);
+        if (t.indexOf('公尺') === 0 || /^\d+\s*公尺$/.test(t)) {
+          var mv = parseInt(t.replace(/[^\d]/g, ''), 10);
+          $('#kmk', box).value = '0';
+          $('#kmm', box).value = String(mv);
+        } else {
+          $('#kmk', box).value = mix[1];
+          $('#kmm', box).value = mix[2] || '0';
+        }
+        upd();
+      });
+    });
+    upd();
   }
 
   function toolTri(box) {
@@ -825,7 +993,7 @@
     var ids = Object.keys(S.wrong);
     var html = '<h2 class="sec">錯題本</h2>';
     if (!ids.length) {
-      html += '<div class="empty"><b>目前沒有錯題</b><p>去練習，答錯的題目會自動收進來。</p><button class="btn primary" data-go="u6">去練習</button></div>';
+      html += '<div class="empty"><b>目前沒有錯題</b><p>去練習，答錯的題目會自動收進來。</p><button class="btn primary" data-go="u1">去練習</button></div>';
       $('#view').innerHTML = html; return;
     }
     html += '<p class="sub">共 ' + ids.length + ' 題。答對一次就會自動移除。</p><div class="panel">';
@@ -879,7 +1047,7 @@
     { id: 'a7', n: '連三day', d: '連續 3 天回來學習', f: function () { return (S.streak || 0) >= 3; } },
     { id: 'a8', n: '無限練習', d: '用生成器做 30 題', f: function () { return S.gen.n >= 30; } },
     { id: 'a9', n: '錯題清零', d: '錯題本清空（至少做過 20 題）', f: function () { return Object.keys(S.done).length >= 20 && Object.keys(S.wrong).length === 0; } },
-    { id: 'a10', n: '全單元制霸', d: '五個單元全部答對', f: function () { return UNITS.every(function (u) { return u.items.every(function (i) { return S.done[i.id] && S.done[i.id].ok; }); }); } }
+    { id: 'a10', n: '全單元制霸', d: '所有單元全部答對', f: function () { return UNITS.every(function (u) { return u.items.every(function (i) { return S.done[i.id] && S.done[i.id].ok; }); }); } }
   ];
   function okCount() {
     return Object.keys(S.done).filter(function (k) { return S.done[k].ok; }).length;
@@ -998,6 +1166,47 @@
     var v = Math.round(x * 100) / 100;
     return String(v);
   }
+
+  /* 大數工具：產生指定長度的整數、中文讀法 */
+  function bigStr(len) {
+    var s = String(R(1, 9));
+    for (var i = 1; i < len; i++) s += R(0, 9);
+    return s;
+  }
+  function cnDigit(d) { return '零一二三四五六七八九'[d]; }
+  function readGroup4(v) {
+    var units = ['千', '百', '十', ''];
+    var str = String(v).padStart(4, '0');
+    var s = '', zero = false, started = false;
+    for (var i = 0; i < 4; i++) {
+      var d = +str[i];
+      if (d === 0) { if (started) zero = true; }
+      else {
+        if (zero) s += '零';
+        zero = false;
+        if (!(i === 2 && d === 1 && !s)) s += cnDigit(d);
+        s += units[i];
+        started = true;
+      }
+    }
+    return s;
+  }
+  function readBig(n) {
+    if (n === 0) return '零';
+    var g = [Math.floor(n / 1e8), Math.floor(n % 1e8 / 1e4), n % 1e4];
+    var names = ['億', '萬', ''];
+    var s = '', needZero = false;
+    for (var i = 0; i < 3; i++) {
+      var v = g[i];
+      if (v === 0) { if (s) needZero = true; continue; }
+      if (s && (needZero || v < 1000)) s += '零';
+      s += readGroup4(v) + names[i];
+      needZero = false;
+    }
+    return s;
+  }
+  var POS_NAMES = ['個位', '十位', '百位', '千位', '萬位', '十萬位', '百萬位', '千萬位', '億位'];
+  function nameOfPos(v) { return POS_NAMES[v]; }
 
   var GEN = {
     tri3: function () {
@@ -1251,6 +1460,276 @@
       return {
         type: 'fill', stem: '長條圖縱軸每格代表 ' + per + ' 人，某長條佔 ' + n + ' 格，代表 ( 1 ) 人。',
         ans: [String(per * n)], sol: [per + '×' + n + '＝' + (per * n)], err: '只寫格數。'
+      };
+    },
+    /* ---------- 第 1 單元：一億以內的數 ---------- */
+    bigread: function () {
+      var len = pick([5, 6, 7, 8]);
+      var ds = bigStr(len).split('').map(Number);
+      var idx = R(0, len - 1);
+      while (ds[idx] === 0) idx = R(0, len - 1);
+      var n = ds.join('');
+      var p = Math.pow(10, idx);
+      return {
+        type: 'fill',
+        stem: '在 ' + n + ' 中，' + ds[idx] + ' 在' + nameOfPos(idx) + '，表示 ( 1 )。',
+        ans: [String(ds[idx] * p)],
+        sol: [nameOfPos(idx) + '的位值是 ' + p, ds[idx] + '×' + p + '＝' + (ds[idx] * p)],
+        err: '把位名看錯，或只寫了數字本身。'
+      };
+    },
+    bigcompose: function () {
+      var spec = [['千萬', R(1, 9), 1e7], ['百萬', R(0, 9), 1e6], ['十萬', R(0, 9), 1e5], ['萬', R(1, 9), 1e4]];
+      if (!spec[1][1] && !spec[2][1]) spec[1][1] = R(1, 9);
+      var parts = [], val = 0, sol = [];
+      spec.forEach(function (s) {
+        if (!s[1]) return;
+        parts.push(s[1] + ' 個' + s[0]);
+        val += s[1] * s[2];
+        sol.push(s[1] + '×' + s[2] + '＝' + (s[1] * s[2]));
+      });
+      return {
+        type: 'fill',
+        stem: parts.join('、') + ' 合起來是 ( 1 )。',
+        ans: [String(val)],
+        sol: sol.concat(['全部相加：' + val]),
+        err: '某一個位名漏補 0，或位名對錯位置。'
+      };
+    },
+    bigcompare: function () {
+      var a = bigStr(pick([5, 6, 7, 8]));
+      var b = Math.random() < 0.5 ? bigStr(a.length) : bigStr(pick([5, 6, 7, 8]));
+      while (a === b) b = bigStr(a.length);
+      var ans = Number(a) > Number(b) ? '＞' : '＜';
+      return {
+        type: 'choice',
+        stem: '比較大小：' + a + ' 　□　 ' + b,
+        opts: ['＞', '＜', '＝'], ans: [ans],
+        sol: [a.length !== b.length ? '位數不同：' + a + ' 是 ' + a.length + ' 位數，' + b + ' 是 ' + b.length + ' 位數' : '位數相同，從最高位開始比', '所以 ' + a + ' ' + ans + ' ' + b],
+        err: '沒有先比位數，直接從個位比。'
+      };
+    },
+    bigaddsub: function () {
+      var a = +bigStr(pick([5, 6, 7]));
+      if (Math.random() < 0.5) {
+        var b = +bigStr(pick([4, 5, 6]));
+        var s = a + b;
+        return {
+          type: 'fill', stem: a + ' ＋ ' + b + ' ＝ ( 1 )',
+          ans: [String(s)],
+          sol: ['短的數前面補 0，位值對齊', a + '＋' + b + '＝' + s],
+          err: '沒有對齊位值，或進位漏加。'
+        };
+      }
+      var b2 = +bigStr(pick([4, 5, 6]));
+      var big = Math.max(a, b2), small = Math.min(a, b2);
+      var d = big - small;
+      return {
+        type: 'fill', stem: big + ' － ' + small + ' ＝ ( 1 )',
+        ans: [String(d)],
+        sol: ['位值對齊，不夠減要借位', big + '－' + small + '＝' + d],
+        err: '借位時少算 1，或位數沒對齊。'
+      };
+    },
+    /* ---------- 第 2 單元：整數的乘法 ---------- */
+    mul4x1: function () {
+      var a = R(1000, 9999), b = R(2, 9);
+      var p = a * b;
+      return {
+        type: 'fill', stem: a + ' × ' + b + ' ＝ ( 1 )',
+        ans: [String(p)],
+        sol: ['用直式，從個位開始一位一位乘', '每一位乘完要把進位加回去', a + '×' + b + '＝' + p],
+        err: '進位忘了加，或位值對錯。'
+      };
+    },
+    mul2x2: function () {
+      var a = R(12, 99), b = R(12, 99);
+      var u = b % 10, t = Math.floor(b / 10);
+      var p = a * b;
+      return {
+        type: 'fill', stem: a + ' × ' + b + ' ＝ ( 1 )',
+        ans: [String(p)],
+        sol: [a + '×' + u + '＝' + (a * u), a + '×' + t + '＝' + (a * t) + '（往左移一位）→ ' + (a * t * 10), (a * u) + '＋' + (a * t * 10) + '＝' + p],
+        err: '第二層積沒有往左移一位。'
+      };
+    },
+    mul4x2: function () {
+      var a = R(1000, 9999), b = R(11, 99);
+      var u = b % 10, t = Math.floor(b / 10);
+      var p = a * b;
+      return {
+        type: 'fill', stem: a + ' × ' + b + ' ＝ ( 1 )',
+        ans: [String(p)],
+        sol: [a + '×' + u + '＝' + (a * u), a + '×' + t + '＝' + (a * t) + '（往左移一位）→ ' + (a * t * 10), (a * u) + '＋' + (a * t * 10) + '＝' + p],
+        err: '兩層積位值沒對齊，或進位漏加。'
+      };
+    },
+    mulround: function () {
+      var form = pick(['千', '百', '十十']);
+      var a, b, base, x, y, zeros;
+      if (form === '千') { x = R(2, 9); y = R(2, 9); base = 1000; zeros = 3; a = x * base; b = y; }
+      else if (form === '百') { x = R(2, 9); y = R(2, 9); base = 100; zeros = 2; a = x * base; b = y; }
+      else { x = R(2, 9); y = R(2, 9); zeros = 2; a = x * 10; b = y * 10; }
+      var mid = form === '十十' ? x * y : x * y;
+      var p = a * b;
+      return {
+        type: 'fill', stem: a + ' × ' + b + ' ＝ ( 1 )',
+        ans: [String(p)],
+        sol: ['先算不是 0 的部分：' + x + '×' + y + '＝' + mid, '再補 ' + zeros + ' 個 0：' + p],
+        err: '0 的個數算錯，補多或補少。'
+      };
+    },
+    /* ---------- 第 3 單元：角度 ---------- */
+    angclass: function () {
+      var d = pick([R(1, 89), 90, R(91, 179), 180]);
+      var nm = d < 90 ? '銳角' : (d === 90 ? '直角' : (d < 180 ? '鈍角' : '平角'));
+      return {
+        type: 'choice', stem: '一個角是 ' + d + '°，它是哪一種角？',
+        opts: ['銳角', '直角', '鈍角', '平角'], ans: [nm],
+        sol: ['直角 90°、平角 180°', d + '° ' + (d < 90 ? '比 90° 小 → 銳角' : (d === 90 ? '剛好 90° → 直角' : (d < 180 ? '比 90° 大、比 180° 小 → 鈍角' : '剛好 180° → 平角')))],
+        err: '只記「大於 90 就是鈍角」，忘了還有平角。'
+      };
+    },
+    angclock: function () {
+      var st = R(1, 12), steps = R(1, 9);
+      var en = ((st - 1 + steps) % 12) + 1;
+      var deg = steps * 30;
+      return {
+        type: 'fill', stem: '鐘面上，分針從 ' + st + ' 順時針走到 ' + en + '，轉了 ( 1 ) 度。',
+        ans: [String(deg)],
+        sol: ['從 ' + st + ' 到 ' + en + ' 共 ' + steps + ' 大格', steps + '×30°＝' + deg + '°'],
+        err: '格數數錯，或把一大格當成 6°。'
+      };
+    },
+    angcompose: function () {
+      var a = R(10, 80), b = R(10, 80);
+      if (a + b > 175) b = 175 - a;
+      var s = a + b;
+      return {
+        type: 'fill', stem: '∠A＝' + a + '°，∠B＝' + b + '°，兩角合起來是 ( 1 ) 度。',
+        ans: [String(s)],
+        sol: [a + '＋' + b + '＝' + s],
+        err: '把「合起來」做成減法。'
+      };
+    },
+    angdecompose: function () {
+      var base = pick([90, 180]);
+      var a = R(10, base - 15);
+      var r = base - a;
+      return {
+        type: 'fill', stem: (base === 90 ? '直角' : '平角') + '扣掉 ' + a + '° 的角，剩下 ( 1 ) 度。',
+        ans: [String(r)],
+        sol: [(base === 90 ? '直角是 90°' : '平角是 180°'), base + '－' + a + '＝' + r],
+        err: '用錯大角的度數（把平角當 90°）。'
+      };
+    },
+    /* ---------- 第 4 單元：整數的除法 ---------- */
+    div4x1: function () {
+      var a = R(1000, 9999), b = R(2, 9);
+      var q = Math.floor(a / b), r = a % b;
+      return {
+        type: 'fill', stem: a + ' ÷ ' + b + ' 的商是 ( 1 )，餘數是 ( 2 )。',
+        ans: [String(q), String(r)],
+        sol: [b + '×' + q + '＝' + (b * q), a + '－' + (b * q) + '＝' + r, '驗算：' + b + '×' + q + '＋' + r + '＝' + (b * q + r)],
+        err: '餘數沒有比除數小，或忘記放下一位。'
+      };
+    },
+    div2x2: function () {
+      var b = R(11, 49), q = R(2, 9), r = R(0, b - 1);
+      var a = b * q + r;
+      return {
+        type: 'fill', stem: a + ' ÷ ' + b + ' 的商是 ( 1 )，餘數是 ( 2 )。',
+        ans: [String(q), String(r)],
+        sol: ['把 ' + b + ' 看成 ' + (Math.round(b / 10) * 10) + ' 估商', b + '×' + q + '＝' + (b * q), a + '－' + (b * q) + '＝' + r],
+        err: '估商後沒有乘回去檢查。'
+      };
+    },
+    div3x2: function () {
+      var b = R(11, 99), q = R(2, 9), r = R(0, b - 1);
+      var a = b * q + r;
+      if (a < 100) a += b * 10;
+      return {
+        type: 'fill', stem: a + ' ÷ ' + b + ' 的商是 ( 1 )，餘數是 ( 2 )。',
+        ans: [String(Math.floor(a / b)), String(a % b)],
+        sol: ['估商：把 ' + b + ' 看成 ' + (Math.round(b / 10) * 10), b + '×' + Math.floor(a / b) + '＝' + (b * Math.floor(a / b)), a + '－' + (b * Math.floor(a / b)) + '＝' + (a % b)],
+        err: '商的位數沒對齊。'
+      };
+    },
+    divcheck: function () {
+      var d = R(11, 99), q = R(2, 9), r = R(0, d - 1);
+      var a = d * q + r;
+      return {
+        type: 'fill', stem: '除數是 ' + d + '、商是 ' + q + '、餘數是 ' + r + '，被除數是 ( 1 )。',
+        ans: [String(a)],
+        sol: [d + '×' + q + '＝' + (d * q), (d * q) + '＋' + r + '＝' + a],
+        err: '忘記加餘數。'
+      };
+    },
+    /* ---------- 第 5 單元：公里 ---------- */
+    kmconv: function () {
+      if (Math.random() < 0.5) {
+        var k = R(1, 20);
+        return {
+          type: 'fill', stem: k + ' 公里＝( 1 ) 公尺。',
+          ans: [String(k * 1000)],
+          sol: ['1 公里＝1000 公尺', k + '×1000＝' + (k * 1000)],
+          err: '乘以 100 而不是 1000。'
+        };
+      }
+      var m = R(1, 20) * 1000;
+      return {
+        type: 'fill', stem: m + ' 公尺＝( 1 ) 公里。',
+        ans: [String(m / 1000)],
+        sol: ['1 公里＝1000 公尺', m + '÷1000＝' + (m / 1000)],
+        err: '除以 100 而不是 1000。'
+      };
+    },
+    kmregroup: function () {
+      var k = R(1, 9), m = R(1, 999);
+      var total = k * 1000 + m;
+      return {
+        type: 'fill', stem: total + ' 公尺＝( 1 ) 公里 ( 2 ) 公尺。',
+        ans: [String(k), String(m)],
+        sol: [total + '÷1000＝' + k + ' 餘 ' + m, '所以是 ' + k + ' 公里 ' + m + ' 公尺'],
+        err: '公尺部分沒有補滿三位數。'
+      };
+    },
+    kmaddsub: function () {
+      if (Math.random() < 0.5) {
+        var k1 = R(1, 8), m1 = R(1, 9) * 100;
+        var k2 = R(1, 8), m2 = R(1, 9) * 100;
+        if (m1 + m2 === 1000) m2 += 100;
+        var tot = k1 * 1000 + m1 + k2 * 1000 + m2;
+        var rk = Math.floor(tot / 1000), rm = tot % 1000;
+        return {
+          type: 'fill', stem: k1 + ' 公里 ' + m1 + ' 公尺＋' + k2 + ' 公里 ' + m2 + ' 公尺＝( 1 ) 公里 ( 2 ) 公尺。',
+          ans: [String(rk), String(rm)],
+          sol: [m1 + '＋' + m2 + '＝' + (m1 + m2) + ' 公尺', (m1 + m2) >= 1000 ? (m1 + m2) + ' 公尺＝1 公里 ' + ((m1 + m2) - 1000) + ' 公尺' : '公尺不足 1000，不進位', '公里部分相加得 ' + rk + ' 公里 ' + rm + ' 公尺'],
+          err: '公尺滿 1000 忘記進位成公里。'
+        };
+      }
+      var bk = R(3, 9), bm = R(1, 9) * 100;
+      var sk = R(1, bk - 1), sm = R(1, 9) * 100;
+      var t1 = bk * 1000 + bm, t2 = sk * 1000 + sm;
+      var diff = t1 - t2;
+      return {
+        type: 'fill', stem: bk + ' 公里 ' + bm + ' 公尺－' + sk + ' 公里 ' + sm + ' 公尺＝( 1 ) 公里 ( 2 ) 公尺。',
+        ans: [String(Math.floor(diff / 1000)), String(diff % 1000)],
+        sol: [(bm < sm ? bm + ' 公尺不夠減，向 ' + bk + ' 公里借 1 公里' : '先算公尺：' + bm + '－' + sm + '＝' + (bm - sm)), '全部換成公尺：' + t1 + '－' + t2 + '＝' + diff, diff + ' 公尺＝' + Math.floor(diff / 1000) + ' 公里 ' + (diff % 1000) + ' 公尺'],
+        err: '公尺不夠減時，沒有向公里借 1000 公尺。'
+      };
+    },
+    kmcompare: function () {
+      var k = R(1, 5), m = R(0, 9) * 100;
+      var a = k * 1000 + m;
+      var b = pick([a, a + R(1, 5) * 100, a - R(1, 5) * 100]);
+      if (b < 0) b = a + 100;
+      var ans = a > b ? '＞' : (a < b ? '＜' : '＝');
+      return {
+        type: 'choice', stem: '比較大小：' + k + ' 公里 ' + m + ' 公尺 　□　 ' + b + ' 公尺',
+        opts: ['＞', '＜', '＝'], ans: [ans],
+        sol: [k + ' 公里 ' + m + ' 公尺＝' + a + ' 公尺', a + ' ' + ans + ' ' + b],
+        err: '沒有先換成同一個單位就比。'
       };
     }
   };
